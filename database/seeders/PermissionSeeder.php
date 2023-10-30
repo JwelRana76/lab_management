@@ -15,9 +15,13 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         $groups = [
-             'patient',
-             'setting',
-             'report',
+            'patient',
+            'setting',
+            'report',
+            'user',
+            'doctor',
+            'referral',
+            'pathology',
         ];
         $permissions = ['module','index','store','update','delete','advance'];
 

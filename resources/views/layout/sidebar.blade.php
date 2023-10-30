@@ -31,20 +31,46 @@
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
+    @if (userHasPermission('patient-module'))
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+        <a class="nav-link {{Request::is('patient*')?'':'collapsed'}}" href="#" data-toggle="collapse" data-target="#collapseTwo"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-users"></i>
             <span>Patient</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseTwo" class="collapse {{Request::is('patient*')?'show':''}}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html"><i class="fas fa-fw fa-arrow-right mr-2"></i> Patient List</a>
-                <a class="collapse-item" href="cards.html"><i class="fas fa-fw fa-arrow-right mr-2"></i> Add Patient</a>
+                @if (userHasPermission('patient-store'))
+                <a class="collapse-item {{Request::is('patient/create')?'active':''}}" href="{{ route('patient.create') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Add Patient</a>
+                @endif
+                @if (userHasPermission('patient-index'))
+                <a class="collapse-item {{Request::is('patient/')?'active':''}}" href="{{ route('patient.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Patient List</a>
+                @endif
             </div>
         </div>
     </li>
+    @endif
+    @if (userHasPermission('doctor-module'))
+    <li class="nav-item">
+        <a class="nav-link {{Request::is('doctor*')?'':'collapsed'}}" href="#" data-toggle="collapse" data-target="#doctorMenu"
+            aria-expanded="true" aria-controls="doctorMenu">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Doctor</span>
+        </a>
+        <div id="doctorMenu" class="collapse {{Request::is('doctor*')?'show':''}}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                @if (userHasPermission('doctor-store'))
+                <a class="collapse-item {{Request::is('doctor/create')?'active':''}}" href="{{ route('doctor.create') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Add Doctor</a>
+                @endif
+                @if (userHasPermission('doctor-index'))
+                <a class="collapse-item {{Request::is('doctor/')?'active':''}}" href="{{ route('doctor.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Doctor List</a>
+                @endif
+            </div>
+        </div>
+    </li>
+    @endif
     <!-- Nav Item - Pages Collapse Menu -->
+    @if (userHasPermission('setting-index') || Auth::user()->id == 1 )
     <li class="nav-item">
         <a class="nav-link {{Request::is('setting*')?'':'collapsed'}}" href="#" data-toggle="collapse" data-target="#collapsePages"
             aria-expanded="true" aria-controls="collapsePages">
@@ -54,11 +80,14 @@
         <div id="collapsePages" class="collapse {{Request::is('setting*')?'show':''}}" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item {{Request::is('setting/role')?'active':''}}" href="{{ route('role.index') }}"> <i class="fas fa-fw fa-arrow-right mr-2"></i>Role</a>
+                @if (userHasPermission('user-index'))
                 <a class="collapse-item {{Request::is('setting/user')?'active':''}}" href="{{ route('user.index') }}"> <i class="fas fa-fw fa-arrow-right mr-2"></i>User</a>
+                @endif
                 <a class="collapse-item {{Request::is('setting/site_setting')?'active':''}}" href="{{ route('site_setting.index') }}"> <i class="fas fa-fw fa-arrow-right mr-2"></i>Site Setting</a>
             </div>
         </div>
     </li>
+    @endif
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>

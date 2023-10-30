@@ -60,6 +60,6 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
         $this->baseService->setPermission($request->all(), $id);
-        return redirect()->route('role.permission', $id)->with('warning', 'Permission Setup Successfully');
+        return redirect()->route('role.permission', $id)->with('success', 'Permission Setup Successfully');
     }
 }

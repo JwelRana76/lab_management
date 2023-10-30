@@ -15,7 +15,6 @@ function userHasPermission($permission)
 
   $user = Auth()->user()->id;
   $role = UserHasRole::where('user_id', $user)->first();
-
   $permission = Permission::where('name', $permission)->first();
   if ($permission && $role) {
     $valide = RoleHasPermission::where(['role_id' => $role->role_id, 'permission_id' => $permission->id])->first();

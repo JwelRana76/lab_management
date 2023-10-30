@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\PatientController;
+use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\SiteSettingController;
@@ -45,6 +48,30 @@ Route::group(['middleware'=>['auth']], function() {
     Route::group(['prefix' => 'setting/site_setting', 'as' => 'site_setting.'], function () {
         Route::get('/',[SiteSettingController::class, 'index'])->name('index');
         Route::post('/update/{id}', [SiteSettingController::class, 'update'])->name('update');
+    });
+    Route::group(['prefix' => 'patient', 'as' => 'patient.'], function () {
+        Route::get('/', [PatientController::class, 'index'])->name('index');
+        Route::get('/create', [PatientController::class, 'create'])->name('create');
+        Route::post('/store', [PatientController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [PatientController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [PatientController::class, 'update'])->name('update');
+        Route::get('/delete/{id}', [PatientController::class, 'delete'])->name('delete');
+    });
+    Route::group(['prefix' => 'doctor', 'as' => 'doctor.'], function () {
+        Route::get('/', [DoctorController::class, 'index'])->name('index');
+        Route::get('/create', [DoctorController::class, 'create'])->name('create');
+        Route::post('/store', [DoctorController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [DoctorController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [DoctorController::class, 'update'])->name('update');
+        Route::get('/delete/{id}', [DoctorController::class, 'delete'])->name('delete');
+    });
+    Route::group(['prefix' => 'referral', 'as' => 'referral.'], function () {
+        Route::get('/', [ReferralController::class, 'index'])->name('index');
+        Route::get('/create', [ReferralController::class, 'create'])->name('create');
+        Route::post('/store', [ReferralController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [ReferralController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [ReferralController::class, 'update'])->name('update');
+        Route::get('/delete/{id}', [ReferralController::class, 'delete'])->name('delete');
     });
     
 });
