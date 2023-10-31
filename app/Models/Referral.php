@@ -9,6 +9,8 @@ class Referral extends Model
 {
     use HasFactory;
 
+    protected $table = 'referrals';
+
     protected $guarded = ['id'];
 
     public static $columns = [
@@ -17,4 +19,17 @@ class Referral extends Model
         ['name' => 'gender', 'data' => 'gender'],
         ['name' => 'action', 'data' => 'action'],
     ];
+
+    function scopeActive($q)
+    {
+        return $q->where('is_active', 1);
+    }
+    function gender()
+    {
+        return $this->belongsTo(Gender::class);
+    }
+    function religion()
+    {
+        return $this->belongsTo(Religion::class);
+    }
 }

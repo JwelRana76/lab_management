@@ -15,6 +15,7 @@ class Input extends Component
         public $id = '',
         public $class = '',
         public $type = '',
+        public $name = null,
     ) {
         //
     }

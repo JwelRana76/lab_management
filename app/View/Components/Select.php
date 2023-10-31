@@ -16,6 +16,7 @@ class Select extends Component
         public $label = null,
         public $id = null,
         public $key = null,
+        public $name = null,
     ) {
         //
     }

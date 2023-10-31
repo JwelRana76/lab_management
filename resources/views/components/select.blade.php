@@ -12,7 +12,7 @@
         <div class="input-group">
     @endif
     
-    <select name="{{ $id }}" id="{{ $id }}" class="form-control selectpicker" data-live-search="true" title="Select {{ ucwords(str_replace('_', ' ', $id)) }}" {{ $attributes }}>
+    <select name="{{ $name == null ? $id:$name }}" id="{{ $id }}" class="form-control selectpicker" data-live-search="true" title="Select {{ ucwords(str_replace('_', ' ', $id)) }}" {{ $attributes }}>
         @foreach ($options as $option)
             <option
                 @php

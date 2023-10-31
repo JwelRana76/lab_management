@@ -20,6 +20,11 @@ class Doctor extends Model
         ['name' => 'action', 'data' => 'action'],
     ];
 
+    function scopeActive($q)
+    {
+        return $q->where('is_active', 1);
+    }
+
     function gender()
     {
         return $this->belongsTo(Gender::class);

@@ -63,7 +63,26 @@
                 <a class="collapse-item {{Request::is('doctor/create')?'active':''}}" href="{{ route('doctor.create') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Add Doctor</a>
                 @endif
                 @if (userHasPermission('doctor-index'))
-                <a class="collapse-item {{Request::is('doctor/')?'active':''}}" href="{{ route('doctor.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Doctor List</a>
+                <a class="collapse-item {{Request::is('doctor')?'active':''}}" href="{{ route('doctor.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Doctor List</a>
+                @endif
+            </div>
+        </div>
+    </li>
+    @endif
+    @if (userHasPermission('referral-module'))
+    <li class="nav-item">
+        <a class="nav-link {{Request::is('referral*')?'':'collapsed'}}" href="#" data-toggle="collapse" data-target="#referralMenu"
+            aria-expanded="true" aria-controls="referralMenu">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Referral</span>
+        </a>
+        <div id="referralMenu" class="collapse {{Request::is('referral*')?'show':''}}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                @if (userHasPermission('referral-store'))
+                <a class="collapse-item {{Request::is('referral/create')?'active':''}}" href="{{ route('referral.create') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Add Referral</a>
+                @endif
+                @if (userHasPermission('referral-index'))
+                <a class="collapse-item {{Request::is('referral')?'active':''}}" href="{{ route('referral.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Referral List</a>
                 @endif
             </div>
         </div>

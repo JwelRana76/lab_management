@@ -28,8 +28,10 @@ class DoctorService extends Service
         }
         return $img;
       })
+      ->addColumn('gender', function ($item) {
+        return $item->gender->name ?? "N/A";
+      })
       ->addColumn('action', fn ($item) => view('pages.doctor.action', compact('item'))->render())
-      ->addColumn('action', fn ($item) => $item->gender->name ?? 'N/A')
       ->rawColumns(['photo', 'action'])
       ->make(true);
   }
@@ -47,6 +49,7 @@ class DoctorService extends Service
       Doctor::create($data);
 
       DB::commit();
+      return ['success' => "Doctor Created Successfully"];
     } catch (Exception $e) {
       DB::rollBack();
       dd($e->getMessage());
@@ -67,6 +70,7 @@ class DoctorService extends Service
       $doctor->update($data);
 
       DB::commit();
+      return ['success' => "Doctor Updated Successfully"];
     } catch (Exception $e) {
       DB::rollBack();
       dd($e->getMessage());
@@ -77,5 +81,6 @@ class DoctorService extends Service
     $this->model::findOrFail($id)->update([
       'is_active' => false,
     ]);
+    return ['success' => "Doctor Deleted Successfully"];
   }
 }
