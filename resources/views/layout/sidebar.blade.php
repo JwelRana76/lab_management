@@ -27,7 +27,7 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        Interface
+        Pathology
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
@@ -45,6 +45,22 @@
                 @endif
                 @if (userHasPermission('patient-index'))
                 <a class="collapse-item {{Request::is('patient/')?'active':''}}" href="{{ route('patient.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Patient List</a>
+                @endif
+            </div>
+        </div>
+    </li>
+    @endif
+    @if (userHasPermission('pathology-module'))
+    <li class="nav-item">
+        <a class="nav-link {{Request::is('pathology*')?'':'collapsed'}}" href="#" data-toggle="collapse" data-target="#pathology"
+            aria-expanded="true" aria-controls="pathology">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Pathology</span>
+        </a>
+        <div id="pathology" class="collapse {{Request::is('pathology*')?'show':''}}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                @if (userHasPermission('pathology_test-index'))
+                <a class="collapse-item {{Request::is('pathology/test')?'active':''}}" href="{{ route('test.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Test</a>
                 @endif
             </div>
         </div>

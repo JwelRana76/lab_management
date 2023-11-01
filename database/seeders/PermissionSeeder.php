@@ -22,6 +22,7 @@ class PermissionSeeder extends Seeder
             'doctor',
             'referral',
             'pathology',
+            'pathology_test',
         ];
         $permissions = ['module','index','store','update','delete','advance'];
 

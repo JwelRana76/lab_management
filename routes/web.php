@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\PathologyTestCategoryController;
+use App\Http\Controllers\PathologyTestController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\RoleController;
@@ -72,6 +74,22 @@ Route::group(['middleware'=>['auth']], function() {
         Route::get('/edit/{id}', [ReferralController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [ReferralController::class, 'update'])->name('update');
         Route::get('/delete/{id}', [ReferralController::class, 'delete'])->name('delete');
+    });
+    Route::group(['prefix' => 'pathology/test', 'as' => 'test.'], function () {
+        Route::get('/', [PathologyTestController::class, 'index'])->name('index');
+        Route::get('/create', [PathologyTestController::class, 'create'])->name('create');
+        Route::post('/store', [PathologyTestController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [PathologyTestController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [PathologyTestController::class, 'update'])->name('update');
+        Route::get('/delete/{id}', [PathologyTestController::class, 'delete'])->name('delete');
+    });
+    Route::group(['prefix' => 'pathology/test_category', 'as' => 'test_category.'], function () {
+        Route::get('/', [PathologyTestCategoryController::class, 'index'])->name('index');
+        Route::get('/create', [PathologyTestCategoryController::class, 'create'])->name('create');
+        Route::post('/store', [PathologyTestCategoryController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [PathologyTestCategoryController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [PathologyTestCategoryController::class, 'update'])->name('update');
+        Route::get('/delete/{id}', [PathologyTestCategoryController::class, 'delete'])->name('delete');
     });
     
 });
