@@ -87,8 +87,9 @@ Route::group(['middleware'=>['auth']], function() {
         Route::get('/', [PathologyTestCategoryController::class, 'index'])->name('index');
         Route::get('/create', [PathologyTestCategoryController::class, 'create'])->name('create');
         Route::post('/store', [PathologyTestCategoryController::class, 'store'])->name('store');
+        Route::post('/categorystore', [PathologyTestCategoryController::class, 'categorystore'])->name('categorystore');
         Route::get('/edit/{id}', [PathologyTestCategoryController::class, 'edit'])->name('edit');
-        Route::post('/update/{id}', [PathologyTestCategoryController::class, 'update'])->name('update');
+        Route::post('/update', [PathologyTestCategoryController::class, 'update'])->name('update');
         Route::get('/delete/{id}', [PathologyTestCategoryController::class, 'delete'])->name('delete');
     });
     

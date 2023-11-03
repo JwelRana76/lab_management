@@ -24,7 +24,8 @@ class PathologyTestController extends Controller
         if (request()->ajax()) {
             return $tests;
         }
-        return view('pages.pathology.test.index', compact('columns'));
+        $categories = PathologyTestCategory::where('is_active', 1)->get();
+        return view('pages.pathology.test.index', compact('columns', 'categories'));
     }
 
     function create()
