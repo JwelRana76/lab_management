@@ -64,6 +64,22 @@
   border: none;
   background: none;
 }
+/* selectpicker custome css */
+.btn-light {
+  background: white;
+  border: 1px solid #ddd;
+}
+
+.btn-light:hover {
+  background: white;
+}
+
+
+.btn-light:not(:disabled):not(.disabled).active,
+.btn-light:not(:disabled):not(.disabled):active,
+.show>.btn-light.dropdown-toggle {
+  background: white;
+}
 
 @media only screen and (max-width: 600px) {
   .dataTables_length {

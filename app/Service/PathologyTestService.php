@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Models\PathologyTest;
 use Yajra\DataTables\Facades\DataTables;
 
-class PathologyTestService
+class PathologyTestService extends Service
 {
   protected $testModel = PathologyTest::class;
 

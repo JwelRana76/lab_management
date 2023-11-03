@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\PathologyPatientController;
 use App\Http\Controllers\PathologyTestCategoryController;
 use App\Http\Controllers\PathologyTestController;
+use App\Http\Controllers\PathologyTubeController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\RoleController;
@@ -51,13 +53,16 @@ Route::group(['middleware'=>['auth']], function() {
         Route::get('/',[SiteSettingController::class, 'index'])->name('index');
         Route::post('/update/{id}', [SiteSettingController::class, 'update'])->name('update');
     });
-    Route::group(['prefix' => 'patient', 'as' => 'patient.'], function () {
-        Route::get('/', [PatientController::class, 'index'])->name('index');
-        Route::get('/create', [PatientController::class, 'create'])->name('create');
-        Route::post('/store', [PatientController::class, 'store'])->name('store');
-        Route::get('/edit/{id}', [PatientController::class, 'edit'])->name('edit');
-        Route::post('/update/{id}', [PatientController::class, 'update'])->name('update');
-        Route::get('/delete/{id}', [PatientController::class, 'delete'])->name('delete');
+    Route::group(['prefix' => 'patient', 'as' => 'pathology.patient.'], function () {
+        Route::get('/', [PathologyPatientController::class, 'index'])->name('index');
+        Route::get('/create', [PathologyPatientController::class, 'create'])->name('create');
+        Route::post('/store', [PathologyPatientController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [PathologyPatientController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [PathologyPatientController::class, 'update'])->name('update');
+        Route::get('/delete/{id}', [PathologyPatientController::class, 'delete'])->name('delete');
+
+        Route::get('/test_find/{id}', [PathologyPatientController::class, 'testFind']);
+        Route::get('/tube_find/{id}', [PathologyPatientController::class, 'tubeFind']);
     });
     Route::group(['prefix' => 'doctor', 'as' => 'doctor.'], function () {
         Route::get('/', [DoctorController::class, 'index'])->name('index');
@@ -82,6 +87,14 @@ Route::group(['middleware'=>['auth']], function() {
         Route::get('/edit/{id}', [PathologyTestController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [PathologyTestController::class, 'update'])->name('update');
         Route::get('/delete/{id}', [PathologyTestController::class, 'delete'])->name('delete');
+    });
+    Route::group(['prefix' => 'pathology/tube', 'as' => 'tube.'], function () {
+        Route::get('/', [PathologyTubeController::class, 'index'])->name('index');
+        Route::get('/create', [PathologyTubeController::class, 'create'])->name('create');
+        Route::post('/store', [PathologyTubeController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [PathologyTubeController::class, 'edit'])->name('edit');
+        Route::post('/update', [PathologyTubeController::class, 'update'])->name('update');
+        Route::get('/delete/{id}', [PathologyTubeController::class, 'delete'])->name('delete');
     });
     Route::group(['prefix' => 'pathology/test_category', 'as' => 'test_category.'], function () {
         Route::get('/', [PathologyTestCategoryController::class, 'index'])->name('index');

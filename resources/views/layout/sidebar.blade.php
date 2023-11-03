@@ -41,10 +41,10 @@
         <div id="collapseTwo" class="collapse {{Request::is('patient*')?'show':''}}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 @if (userHasPermission('patient-store'))
-                <a class="collapse-item {{Request::is('patient/create')?'active':''}}" href="{{ route('patient.create') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Add Patient</a>
+                <a class="collapse-item {{Request::is('patient/create')?'active':''}}" href="{{ route('pathology.patient.create') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Add Patient</a>
                 @endif
                 @if (userHasPermission('patient-index'))
-                <a class="collapse-item {{Request::is('patient/')?'active':''}}" href="{{ route('patient.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Patient List</a>
+                <a class="collapse-item {{Request::is('patient/')?'active':''}}" href="{{ route('pathology.patient.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Patient List</a>
                 @endif
             </div>
         </div>
@@ -61,6 +61,9 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 @if (userHasPermission('pathology_test-index'))
                 <a class="collapse-item {{Request::is('pathology/test')?'active':''}}" href="{{ route('test.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Test</a>
+                @endif
+                @if (userHasPermission('pathology_test-index'))
+                <a class="collapse-item {{Request::is('pathology/tube')?'active':''}}" href="{{ route('tube.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Tube</a>
                 @endif
             </div>
         </div>
