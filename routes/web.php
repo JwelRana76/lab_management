@@ -63,6 +63,7 @@ Route::group(['middleware'=>['auth']], function() {
 
         Route::get('/test_find/{id}', [PathologyPatientController::class, 'testFind']);
         Route::get('/tube_find/{id}', [PathologyPatientController::class, 'tubeFind']);
+        Route::get('/invoice/{id}', [PathologyPatientController::class, 'invoice'])->name('invoice');
     });
     Route::group(['prefix' => 'doctor', 'as' => 'doctor.'], function () {
         Route::get('/', [DoctorController::class, 'index'])->name('index');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Doctor;
 use App\Models\Gender;
+use App\Models\PathologyPatient;
 use App\Models\PathologyTest;
 use App\Models\PathologyTube;
 use App\Models\Referral;
@@ -18,6 +19,12 @@ class PathologyPatientController extends Controller
     }
     function index()
     {
+        $patients = $this->baseService->index();
+        $columns = PathologyPatient::$columns;
+        if (request()->ajax()) {
+            return $patients;
+        }
+        return view('pages.pathology.patient.index', compact('columns'));
     }
 
     function create()
@@ -36,5 +43,16 @@ class PathologyPatientController extends Controller
     function tubeFind($id)
     {
         return PathologyTube::findOrFail($id);
+    }
+    function store(Request $request)
+    {
+        $data = $request->all();
+        $patient = $this->baseService->store($data);
+        return $patient;
+    }
+    function invoice($id)
+    {
+        $patient = PathologyPatient::findOrFail($id);
+        return view('pages.pathology.patient.invoice', compact('patient'));
     }
 }

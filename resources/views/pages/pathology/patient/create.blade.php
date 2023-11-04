@@ -1,7 +1,7 @@
 <x-admin title="Pathology Patient Create">
     {{-- <x-page-header head="Doctor" /> --}}
     <x-card header="Pathology Patient Create" links="{{ route('doctor.index') }}" title="Doctor List">
-        <x-form id="myform" action="{{ route('pathology.patient.store') }}" method="post">
+        <form id="patient_insert_form">
             <div class="row">
                 <div class="col-md-8">
                     <div class="row">
@@ -71,13 +71,15 @@
                         <x-inline-input id="paid" />
                         <x-inline-input id="due" />
                     </x-small-card>
-                    <x-button value="Save" />
-                    <a href="{{ route('pathology.patient.create') }}"  class="btn btn-success float-right mt-3">Clear form</a>
+                    <button onclick="PatientCreate()" id="btnSubmit" type="button" class="btn btn-sm btn-primary mt-3  save-btn" target="_blank"><i
+                                                        class="fa fa-save"></i>
+                                                    Save</button>
+                    <a href="{{ route('pathology.patient.create') }}"  class="btn btn-sm btn-success float-right mt-3">Clear form</a>
                 </div>
                 
             </div>
             
-        </x-form>
+        </form>
     </x-card>
 
     @push('js')
@@ -101,6 +103,7 @@
                                     <td>${data.name}</td>
                                     <td><input type="number" name="qty[]" class="form-control quantity" value="1" min="1" readonly></td>
                                     <input type="hidden" name="rate[]" class="rate" value="${data.test_rate}">
+                                    <input type="hidden" name="test_id[]" class="rate" value="${data.id}">
                                     <td>${data.test_rate}</td>
                                     <td class="subtotal"></td>
                                     <input type="hidden" name="subtotal" class="subtotal" value="">
@@ -125,8 +128,9 @@
                                 <tr data-test-id="${selectedValue}">
                                     <td>${rowCount}</td>
                                     <td>${data.name}</td>
-                                    <td><input type="number" name="qty[]" class="form-control quantity" value="1" min="1"></td>
+                                    <td><input type="number" name="tube_qty[]" class="form-control quantity" id="increment_subtotal" value="1" min="1"></td>
                                     <input type="hidden" name="rate[]" class="rate" value="${data.rate}">
+                                    <input type="hidden" name="tube_id[]" class="rate" value="${data.id}">
                                     <td>${data.rate}</td>
                                     <td class="subtotal"></td>
                                     <input type="hidden" name="subtotal" class="subtotal" value="">
@@ -220,12 +224,47 @@
             $('input[name="discount_amount"],input[name="discount_percent"]').on('input',function(){
                 discount_calculate(parseFloat($(this).val()));
             })
+            $(document).on('click keyup','#increment_subtotal',function(){
+                calculate();
+            });
             $(document).on('click','.delete-tr',function(e){
               e.preventDefault();
               $(this).closest('tr').remove();
 
               calculate();
             });
+
+            $("#btnSubmit").click(function(){
+                $("#btnSubmit").prop('disabled',true);
+            });
+            function PatientCreate(){
+                
+                // $('.error_list').html('');
+                $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                var properties = "toolbar=yes,scrollbars=yes,resizable=yes,top=100,left=500,width=700,height=300";
+                var data = $('#patient_insert_form').serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('pathology.patient.store') }}",
+                    data: data,
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response);
+                        window.open("/patient/invoice/"+response.id,"popup",properties);
+                        location.reload();
+                    },
+                    error: function(reject) {
+                        var response = $.parseJSON(reject.responseText);
+                        $.each(response.errors, function(key, val) {
+                            $('.error_list').append(`<li class="text-danger">`+val+`</li>`);
+                        })
+                    }
+                });
+            }
         </script>
     @endpush
 </x-admin>

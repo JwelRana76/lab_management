@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('site_settings', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('name_short');
-            $table->string('address');
-            $table->string('contact');
-            $table->string('logo')->nullable();
-            $table->string('invoice_prefix')->nullable();
+            $table->foreignId('patient_id')->constrained('pathology_patients')->onDelete('cascade');
+            $table->double('amount');
+            $table->boolean('is_due_collect')->default(false)->comment('0=No/1=Yes');
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('site_settings');
+        Schema::dropIfExists('payments');
     }
 };
