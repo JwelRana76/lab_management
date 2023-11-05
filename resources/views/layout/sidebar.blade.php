@@ -107,6 +107,25 @@
         </div>
     </li>
     @endif
+    @if (userHasPermission('referral-module'))
+    <li class="nav-item">
+        <a class="nav-link {{Request::is('finance*')?'':'collapsed'}}" href="#" data-toggle="collapse" data-target="#financeMenu"
+            aria-expanded="true" aria-controls="financeMenu">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Finance</span>
+        </a>
+        <div id="financeMenu" class="collapse {{Request::is('finance*')?'show':''}}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                @if (userHasPermission('referral-store'))
+                <a class="collapse-item {{Request::is('finance/due_collection')?'active':''}}" href="{{ route('due_collection.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Due Collection</a>
+                @endif
+                @if (userHasPermission('referral-index'))
+                <a class="collapse-item {{Request::is('referral')?'active':''}}" href="{{ route('referral.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Referral List</a>
+                @endif
+            </div>
+        </div>
+    </li>
+    @endif
     <!-- Nav Item - Pages Collapse Menu -->
     @if (userHasPermission('setting-index') || Auth::user()->id == 1 )
     <li class="nav-item">

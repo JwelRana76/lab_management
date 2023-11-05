@@ -1,33 +1,35 @@
-<x-admin title="Pathology Patient Create">
+<x-admin title="Pathology Patient Edit">
     {{-- <x-page-header head="Doctor" /> --}}
-    <x-card header="Pathology Patient Create" links="{{ route('pathology.patient.index') }}" title="Patient List">
+    <x-card header="Pathology Patient Edit" links="{{ route('pathology.patient.index') }}" title="Patient List">
         <form id="patient_insert_form">
+            @csrf
             <div class="row">
                 <div class="col-md-8">
                     <div class="row">
-                        <x-input id="name" class="col-md-12" required />
-                        <x-input id="contact" class="col-md-4" required />
+                        <x-input id="patient_id" type="hidden" value="{{ $patient->id }}" class="col-md-12" required />
+                        <x-input id="name" value="{{ $patient->name }}" class="col-md-12" required />
+                        <x-input id="contact" value="{{ $patient->contact }}" class="col-md-4" required />
                         <div class="col-md-4">
-                            <x-select id="gender" name="gender_id" :options="$genders" class="col-md-4" required />
+                            <x-select id="gender" selectedId="{{ $patient->gender_id }}" name="gender_id" :options="$genders" class="col-md-4" required />
                         </div>
                         <div class=" col-md-4 col-xl-4 col-sm-12">
                             <label for="age">Age</label>
                             <div class="input-group mb-3">
                             <div class="input-group-prepend w-50">
-                                <input type="text" name="age" class="form-control" >
+                                <input type="text" value="{{ $patient->age }}" name="age" class="form-control" >
                             </div>
                             <select class="custom-select" name="age_type" id="inputGroupSelect01">
-                                <option value="1">Days</option>
-                                <option value="2">Months</option>
-                                <option selected value="3">Years</option>
+                                <option value="1" {{ $patient->age_type == 1 ? 'selected':'' }}>Days</option>
+                                <option value="2" {{ $patient->age_type == 2 ? 'selected':'' }}>Months</option>
+                                <option value="3" {{ $patient->age_type == 3 ? 'selected':'' }}>Years</option>
                             </select>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <x-select id="refferal" name="referral_id" :options="$referrals" class="col-md-4" />
+                            <x-select id="refferal" selectedId="{{ $patient->referral_id }}" name="referral_id" :options="$referrals" class="col-md-4" />
                         </div>
                         <div class="col-md-6">
-                            <x-select id="doctor" name="doctor_id" :options="$doctors" class="col-md-4" />
+                            <x-select id="doctor" selectedId="{{ $patient->doctor_id }}" name="doctor_id" :options="$doctors" class="col-md-4" />
                         </div>
                         <div class="col-md-6">
                             <x-select id="test" name="test_id" :options="$tests" key="code" class="col-md-4" />
@@ -49,14 +51,40 @@
                                 </tr>
                             </thead>
                             <tbody id="test_table">
-
+                                @foreach ($patient->tests as $test)
+                                    <tr data-test-id="{{ $test->test->code }}">
+                                    <td>#</td>
+                                    <td>{{ $test->test->name }}</td>
+                                    <td><input type="number" name="qty[]" class="form-control quantity" value="1" min="1" readonly></td>
+                                    <input type="hidden" name="rate[]" class="rate" value="{{ $test->test->test_rate }}">
+                                    <input type="hidden" name="test_id[]" class="rate" value="{{ $test->test->id }}">
+                                    <td>{{ $test->test->test_rate }}</td>
+                                    <td class="subtotal"></td>
+                                    <input type="hidden" name="subtotal" class="subtotal" value="">
+                                    <input type="hidden" name="discount_amount" class="discount_amount" value="{{ $test->test->referral_fee_amount }}">
+                                    <td><a href="" class=" btn-danger btn-sm delete-tr"><i class="fa fa-fw fa-trash"></i></a></td>
+                                </tr>
+                                @endforeach
+                                @foreach ($patient->tubes as $tube)
+                                    <tr data-test-id="{{ $tube->tube->id }}">
+                                    <td>#</td>
+                                    <td>{{ $tube->tube->name }}</td>
+                                    <td><input type="number" name="tube_qty[]" class="form-control quantity" id="increment_subtotal" value="{{ $tube->qty }}" min="1"></td>
+                                    <input type="hidden" name="rate[]" class="rate" value="{{ $tube->tube->rate }}">
+                                    <input type="hidden" name="tube_id[]" class="rate" value="{{ $tube->tube->id }}">
+                                    <td>{{ $tube->tube->rate }}</td>
+                                    <td class="subtotal"></td>
+                                    <input type="hidden" name="subtotal" class="subtotal" value="">
+                                    <td><a href="" class=" btn-danger btn-sm delete-tr"><i class="fa fa-fw fa-trash"></i></a></td>
+                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <x-small-card header="Calculation Part">
-                        <x-inline-input id="sub_total" />
+                        <x-inline-input id="sub_total" value="{{ $patient->total }}" />
                         <input type="hidden" id="max_discount" name="max_discount">
                         <div class="mb-3">
                             <div class="input-group">
@@ -64,17 +92,16 @@
                                     <div class="input-group-text w-100">Discount</div>
                                 </div>
                                 <input type="text" class="form-control" max="100" id="discount_percent" name="discount_percent" placeholder="%">
-                                <input type="text" class="form-control" id="discount_amount" name="discount_amount"  placeholder="Amount">
+                                <input type="text" class="form-control" value="{{ $patient->discount_amount }}" id="discount_amount" name="discount_amount"  placeholder="Amount">
                             </div>
                         </div>
-                        <x-inline-input id="total_payable" />
-                        <x-inline-input id="paid" />
-                        <x-inline-input id="due" />
+                        <x-inline-input id="total_payable" value="{{ $patient->grand_total }}" />
+                        <x-inline-input id="paid" value="{{ $patient->paid }}" />
+                        <x-inline-input id="due" value="{{ $patient->due }}" />
                     </x-small-card>
                     <button onclick="PatientCreate()" id="btnSubmit" type="button" class="btn btn-sm btn-primary mt-3  save-btn" target="_blank"><i
                                                         class="fa fa-save"></i>
-                                                    Save</button>
-                    <a href="{{ route('pathology.patient.create') }}"  class="btn btn-sm btn-success float-right mt-3">Clear form</a>
+                                                    Update</button>
                 </div>
                 
             </div>
@@ -85,7 +112,7 @@
     @push('js')
         <script>
             $(document).ready(function() {
-                
+                calculate();
                 var rowCount = 1;
 
                 // Use event delegation to handle dynamically added elements
@@ -249,19 +276,17 @@
                 var data = $('#patient_insert_form').serialize();
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('pathology.patient.store') }}",
+                    url: "{{ route('pathology.patient.update') }}",
                     data: data,
                     dataType: "json",
                     success: function (response) {
                         console.log(response);
                         window.open("/patient/invoice/"+response.id,"popup",properties);
-                        location.reload();
+                        window.location.href = "/patient";
                     },
                     error: function(reject) {
-                        var response = $.parseJSON(reject.responseText);
-                        $.each(response.errors, function(key, val) {
-                            $('.error_list').append(`<li class="text-danger">`+val+`</li>`);
-                        })
+                        console.log(reject);
+                        
                     }
                 });
             }

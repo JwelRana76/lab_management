@@ -39,7 +39,10 @@ class PathologyPatientService extends Service
     $patinets = $this->model::orderBy('id', 'desc')->get();
     return DataTables::of($patinets)
       ->addColumn('age', function ($item) {
-        return $item->age . $item->age_type == 1 ? 'Days' : ($item->age_type == 2 ? 'Months' : 'Years');
+      $age = $item->age;
+      $age .= ' ';
+      $age .=  $item->age_type == 1 ? 'Days' : ($item->age_type == 2 ? 'Months' : 'Years');
+      return $age;
       })
       ->addColumn('test', function ($item) {
         $badges = '';
@@ -55,6 +58,12 @@ class PathologyPatientService extends Service
         }
         return $badges;
       })
+      ->addColumn('paid', function ($item) {
+        return $item->payment()->sum('amount');
+      })
+      ->addColumn('discount', function ($item) {
+        return $item->discount_amount;
+      })
       ->addColumn('due', function ($item) {
         return $item->due;
       })
@@ -69,7 +78,7 @@ class PathologyPatientService extends Service
       $patient_data['name'] = $data['name'];
       $patient_data['age'] = $data['age'];
       $patient_data['contact'] = $data['contact'];
-      $patient_data['unique_id'] = $this->unique_id();;
+      $patient_data['unique_id'] = $this->unique_id();
       $patient_data['age_type'] = $data['age_type'];
       $patient_data['doctor_id'] = $data['doctor_id'];
       $patient_data['referral_id'] = $data['referral_id'];
@@ -108,6 +117,72 @@ class PathologyPatientService extends Service
     } catch (Exception $e) {
       DB::rollBack();
       dd($e->getMessage());
+    }
+  }
+
+  function update($data)
+  {
+    DB::beginTransaction();
+    try {
+      $patient_data['name'] = $data['name'];
+      $patient_data['age'] = $data['age'];
+      $patient_data['contact'] = $data['contact'];
+      $patient_data['age_type'] = $data['age_type'];
+      $patient_data['doctor_id'] = $data['doctor_id'];
+      $patient_data['referral_id'] = $data['referral_id'];
+      $patient_data['gender_id'] = $data['gender_id'];
+      $patient_data['total'] = $data['sub_total'];
+      $patient_data['discount_amount'] = $data['discount_amount'];
+      $patient_data['discount_percent'] = $data['discount_percent'];
+      $patient_data['grand_total'] = $data['total_payable'];
+      $patient_data['paid'] = $data['paid'];
+
+      $patient = PathologyPatient::findOrFail($data['patient_id']);
+      $patient->update($patient_data);
+
+      $tests = $data['test_id'];
+
+      PatientTest::where('patient_id', $patient->id)->delete();
+      PatientTube::where('patient_id', $patient->id)->delete();
+
+      foreach ($tests as $key => $test) {
+        $patient_test['test_id'] = $test;
+        $patient_test['patient_id'] = $patient->id;
+        PatientTest::create($patient_test);
+      }
+      if ($data['tube_id']) {
+        foreach ($data['tube_id'] as $key => $tube) {
+          $patient_tube['tube_id'] = $tube;
+          $patient_tube['patient_id'] = $patient->id;
+          $patient_tube['qty'] = $data['tube_qty'][$key];
+          PatientTube::create($patient_tube);
+        }
+      }
+      Payment::where('patient_id', $patient->id)->delete();
+
+      $payment = new Payment([
+        'amount' => $patient->paid,
+      ]);
+
+      $patient->payment()->save($payment);
+      DB::commit();
+      return $patient;
+    } catch (Exception $e) {
+      DB::rollBack();
+      dd($e->getMessage(), __LINE__);
+    }
+  }
+
+  function delete($id)
+  {
+    DB::beginTransaction();
+    try {
+      PathologyPatient::findOrFail($id)->delete();
+      DB::commit();
+      return ['success', 'Pathology Patient Deleted Successfully'];
+    } catch (Exception $e) {
+      DB::rollBack();
+      dd($e->getMessage(), __LINE__);
     }
   }
 

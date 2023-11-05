@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\PathologyPatientController;
 use App\Http\Controllers\PathologyTestCategoryController;
 use App\Http\Controllers\PathologyTestController;
@@ -58,7 +59,7 @@ Route::group(['middleware'=>['auth']], function() {
         Route::get('/create', [PathologyPatientController::class, 'create'])->name('create');
         Route::post('/store', [PathologyPatientController::class, 'store'])->name('store');
         Route::get('/edit/{id}', [PathologyPatientController::class, 'edit'])->name('edit');
-        Route::post('/update/{id}', [PathologyPatientController::class, 'update'])->name('update');
+        Route::post('/update', [PathologyPatientController::class, 'update'])->name('update');
         Route::get('/delete/{id}', [PathologyPatientController::class, 'delete'])->name('delete');
 
         Route::get('/test_find/{id}', [PathologyPatientController::class, 'testFind']);
@@ -105,6 +106,10 @@ Route::group(['middleware'=>['auth']], function() {
         Route::get('/edit/{id}', [PathologyTestCategoryController::class, 'edit'])->name('edit');
         Route::post('/update', [PathologyTestCategoryController::class, 'update'])->name('update');
         Route::get('/delete/{id}', [PathologyTestCategoryController::class, 'delete'])->name('delete');
+    });
+    Route::group(['prefix' => 'finance', 'as' => 'due_collection.'], function () {
+        Route::get('/due_collection', [FinanceController::class, 'dueCollection'])->name('index');
+        Route::post('/due_collection/store/{id} ', [FinanceController::class, 'dueCollectionStore'])->name('store');
     });
     
 });
