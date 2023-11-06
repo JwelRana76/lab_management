@@ -52,7 +52,7 @@ class PathologyPatient extends Model
     }
     function payment()
     {
-        return $this->hasOne(Payment::class, 'patient_id', 'id');
+        return $this->hasMany(Payment::class, 'patient_id', 'id');
     }
     function getDueAttribute()
     {

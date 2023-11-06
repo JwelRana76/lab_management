@@ -81,6 +81,14 @@ Route::group(['middleware'=>['auth']], function() {
         Route::get('/edit/{id}', [ReferralController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [ReferralController::class, 'update'])->name('update');
         Route::get('/delete/{id}', [ReferralController::class, 'delete'])->name('delete');
+
+        Route::get('/due/{id}', [ReferralController::class, 'referralDue']);
+        Route::post('/payment_details', [ReferralController::class, 'paymentDetailStore'])->name('payment.store');
+        Route::get('/payment_details/{id}', [ReferralController::class, 'paymentDetail']);
+        Route::get('/payment/edit/{id}', [ReferralController::class, 'paymentEdit']);
+        Route::post('/payment_details/update', [ReferralController::class, 'ReferralPaymentUpdate'])->name('payment.update');
+        Route::get('/payment/delete/{id}', [ReferralController::class, 'paymentDelete'])->name('payment.delete');
+
     });
     Route::group(['prefix' => 'pathology/test', 'as' => 'test.'], function () {
         Route::get('/', [PathologyTestController::class, 'index'])->name('index');

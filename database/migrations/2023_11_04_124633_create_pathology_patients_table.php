@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('contact');
             $table->string('age');
             $table->integer('age_type')->comment('1=day/2=month/3=year');
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('doctor_id')->nullable()->constrained('doctors')->onDelete('cascade');
             $table->foreignId('referral_id')->nullable()->constrained('referrals')->onDelete('cascade');
             $table->foreignId('gender_id')->constrained('genders')->onDelete('cascade')->nullable();
