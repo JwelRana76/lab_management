@@ -74,6 +74,9 @@
                 @if (userHasPermission('pathology_test-index'))
                 <a class="collapse-item {{Request::is('pathology/result-heading')?'active':''}}" href="{{ route('pathology.result_heading.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Result Heading</a>
                 @endif
+                @if (userHasPermission('pathology_test-index'))
+                <a class="collapse-item {{Request::is('pathology/test-setup/create')?'active':''}}" href="{{ route('pathology.test_setup.create') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Add Pathology Setup</a>
+                @endif
             </div>
         </div>
     </li>

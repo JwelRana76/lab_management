@@ -7,6 +7,7 @@ use App\Http\Controllers\PathologyResultHeadingController;
 use App\Http\Controllers\PathologyResultNameController;
 use App\Http\Controllers\PathologyTestCategoryController;
 use App\Http\Controllers\PathologyTestController;
+use App\Http\Controllers\PathologyTestSetupController;
 use App\Http\Controllers\PathologyTubeController;
 use App\Http\Controllers\PathologyUnitController;
 use App\Http\Controllers\PatientController;
@@ -139,6 +140,14 @@ Route::group(['middleware'=>['auth']], function() {
         Route::get('/edit/{id}', [PathologyResultHeadingController::class, 'edit'])->name('edit');
         Route::post('/update', [PathologyResultHeadingController::class, 'update'])->name('update');
         Route::get('/delete/{id}', [PathologyResultHeadingController::class, 'delete'])->name('delete');
+    });
+    Route::group(['prefix' => 'pathology/test-setup', 'as' => 'pathology.test_setup.'], function () {
+        Route::get('/', [PathologyTestSetupController::class, 'index'])->name('index');
+        Route::get('/create', [PathologyTestSetupController::class, 'create'])->name('create');
+        Route::post('/store', [PathologyTestSetupController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [PathologyTestSetupController::class, 'edit'])->name('edit');
+        Route::post('/update', [PathologyTestSetupController::class, 'update'])->name('update');
+        Route::get('/delete/{id}', [PathologyTestSetupController::class, 'delete'])->name('delete');
     });
     Route::group(['prefix' => 'pathology/test_category', 'as' => 'test_category.'], function () {
         Route::get('/', [PathologyTestCategoryController::class, 'index'])->name('index');
