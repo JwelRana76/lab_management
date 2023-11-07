@@ -65,6 +65,12 @@
                 @if (userHasPermission('pathology_test-index'))
                 <a class="collapse-item {{Request::is('pathology/tube')?'active':''}}" href="{{ route('tube.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Tube</a>
                 @endif
+                @if (userHasPermission('pathology_test-index'))
+                <a class="collapse-item {{Request::is('pathology/unit')?'active':''}}" href="{{ route('pathology.unit.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Unit</a>
+                @endif
+                @if (userHasPermission('pathology_test-index'))
+                <a class="collapse-item {{Request::is('pathology/result-name')?'active':''}}" href="{{ route('pathology.result_name.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Result Name</a>
+                @endif
             </div>
         </div>
     </li>
@@ -118,9 +124,6 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 @if (userHasPermission('referral-store'))
                 <a class="collapse-item {{Request::is('finance/due_collection')?'active':''}}" href="{{ route('due_collection.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Due Collection</a>
-                @endif
-                @if (userHasPermission('referral-index'))
-                <a class="collapse-item {{Request::is('referral')?'active':''}}" href="{{ route('referral.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Referral List</a>
                 @endif
             </div>
         </div>
