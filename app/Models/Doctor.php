@@ -42,10 +42,18 @@ class Doctor extends Model
     }
     function getReferamountAttribute()
     {
-        $total = PathologyPatient::join('patient_tests', 'patient_tests.patient_id', '=', 'pathology_patients.id')
+        $patients = PathologyPatient::join('patient_tests', 'patient_tests.patient_id', '=', 'pathology_patients.id')
         ->join('pathology_tests', 'pathology_tests.id', '=', 'patient_tests.test_id')
         ->where('pathology_patients.doctor_id', $this->id)
-            ->sum(DB::raw('pathology_tests.referral_fee_amount - pathology_patients.discount_amount'));
+            ->whereRaw('pathology_tests.referral_fee_amount - pathology_patients.discount_amount > 0')
+            ->select('pathology_patients.*', 'pathology_tests.referral_fee_amount as refer')
+            ->get();
+        $total = 0;
+        foreach ($patients as $key => $item) {
+            if ($item->grand_total - $item->payment()->sum('amount') == 0) {
+                $total += $item->refer;
+            }
+        }
         return $total;
     }
     function payment()

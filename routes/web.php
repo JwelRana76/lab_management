@@ -73,6 +73,13 @@ Route::group(['middleware'=>['auth']], function() {
         Route::get('/edit/{id}', [DoctorController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [DoctorController::class, 'update'])->name('update');
         Route::get('/delete/{id}', [DoctorController::class, 'delete'])->name('delete');
+
+        Route::get('/due/{id}', [DoctorController::class, 'referralDue']);
+        Route::post('/payment_details', [DoctorController::class, 'paymentDetailStore'])->name('payment.store');
+        Route::get('/payment_details/{id}', [DoctorController::class, 'paymentDetail']);
+        Route::get('/payment/edit/{id}', [DoctorController::class, 'paymentEdit']);
+        Route::post('/payment_details/update', [DoctorController::class, 'ReferralPaymentUpdate'])->name('payment.update');
+        Route::get('/payment/delete/{id}', [DoctorController::class, 'paymentDelete'])->name('payment.delete');
     });
     Route::group(['prefix' => 'referral', 'as' => 'referral.'], function () {
         Route::get('/', [ReferralController::class, 'index'])->name('index');

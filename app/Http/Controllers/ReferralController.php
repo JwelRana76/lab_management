@@ -84,6 +84,7 @@ class ReferralController extends Controller
         ->join('users', 'users.id', 'referral_payments.user_id')
         ->where('referrals.id', $id)
             ->select('referral_payments.created_at as date', 'referral_payments.amount', 'users.name as username', 'referral_payments.id as id')
+            ->orderBy('referral_payments.id', 'desc')
             ->get();
     }
     function paymentEdit($id)

@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Models\Doctor;
+use App\Models\ReferralPayment;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
@@ -20,13 +21,18 @@ class DoctorService extends Service
         if ($item->photo) {
           $img = '<img src="/upload/doctor/' . $item->photo . '" alt="logo" width="80px">';
         } else {
-          if ($item->gender_id == 1) {
-            $img = '<img src="/upload/doctor/male.jpg" alt="logo" width="80px">';
-          } else {
-            $img = '<img src="/upload/doctor/female.jpg" alt="logo" width="80px">';
-          }
+        $img = '<img src="/upload/doctor/user.jpg" alt="logo" width="80px">';
         }
         return $img;
+      })
+      ->addColumn('refer_amount', function ($item) {
+        return $item->referamount;
+      })
+      ->addColumn('paid', function ($item) {
+        return $item->payment()->sum('amount');
+      })
+      ->addColumn('due', function ($item) {
+        return $item->due;
       })
       ->addColumn('gender', function ($item) {
         return $item->gender->name ?? "N/A";
@@ -82,5 +88,37 @@ class DoctorService extends Service
       'is_active' => false,
     ]);
     return ['success' => "Doctor Deleted Successfully"];
+  }
+
+  function paymentStore($data)
+  {
+    DB::beginTransaction();
+    try {
+      ReferralPayment::create([
+        'doctor_id' => $data['doctor_id'],
+        'amount' => $data['amount'],
+        'user_id' => auth()->user()->id,
+      ]);
+      DB::commit();
+      return ['success' => 'Doctor Refer Payment Inserted Successfully'];
+    } catch (Exception $e) {
+      DB::rollBack();
+      dd($e->getMessage(), __LINE__);
+    }
+  }
+  function paymentUpdate($data)
+  {
+    DB::beginTransaction();
+    try {
+      ReferralPayment::findOrFail($data['payment_id'])->update([
+        'amount' => $data['amount'],
+        'user_id' => auth()->user()->id,
+      ]);
+      DB::commit();
+      return ['success' => 'Doctor Refer Payment Updated Successfully'];
+    } catch (Exception $e) {
+      DB::rollBack();
+      dd($e->getMessage(), __LINE__);
+    }
   }
 }
