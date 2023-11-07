@@ -1,7 +1,7 @@
 <x-admin title="Pathology Result Name">
     <x-page-header head="Pathology Result Name" />
     <a href="#" class="btn btn-sm btn-primary m-2" data-target="#add_unit" data-toggle="modal" >
-        <i class="fas fa-fw fa-plus"></i> Add Unit
+        <i class="fas fa-fw fa-plus"></i> Add Result Name
     </a>
     <div class="row">
       <x-data-table dataUrl="/pathology/result-name" id="pathologyResultName" :columns="$columns" />
