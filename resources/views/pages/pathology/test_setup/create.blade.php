@@ -60,17 +60,22 @@
 
 
       $('select[name="result_id"]').on('change', function () {
-        var Id = $(this).val();
-        var name = $(this).text();
+        var selectedOption = $(this).find('option:selected');
+        var Id = selectedOption.val();
+        var name = selectedOption.text();
         var col = '';
+
+        var selectedValue = $(this).val();
+        var existingItem = $(`#test_setup_table_body tr[data-test-id="${selectedValue}"]`);
+        if (existingItem.length === 0) {
         col += `
-          <tr>
+          <tr  data-test-id="${selectedValue}">
             <td><input type="hidden" name="result_id[]" value="${Id}">${name}</td>
             <td>
-              <select name="type[]" id="type" class="form-control">
-                  <option>Select Type</option>
+              <select name="type[]" id="type" class="form-control" required>
+                <option>Select Type</option>
+                <option value="1">Input</option>
                   <option value="0">Selected</option>
-                  <option value="1">Input</option>
               </select>   
             </td>
             <td>
@@ -83,7 +88,7 @@
             </td>
             <td>
               <select name="unit[]" id="unit" class="form-control">
-                  <option>Select Unit</option>
+                  <option value="0">Select Unit</option>
                   ${
                       units.map((item)=> `<option value=${item.id}>${item.name}</option>`)
                   }
@@ -92,7 +97,7 @@
             <td><input type="text" name="cal_value[]" class="form-control"></td>
             <td><input type="text" name="cal_type[]" class="form-control"></td>
             <td>
-                <select name="corver_unit[]" id="corver_unit" class="form-control">
+                <select name="convert_unit[]" id="corver_unit" class="form-control">
                     <option value="0">Select Unit</option>
                     ${
                         units.map((item)=> `<option value=${item.id}>${item.name}</option>`)
@@ -104,6 +109,7 @@
             <td><button type="button" class="remove_tr"><i class="fa fa-trash text-danger"></i></button></td>
           </tr>
         `;
+        }
         $('#test_setup_table_body').append(col);
       });
     });

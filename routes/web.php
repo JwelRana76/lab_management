@@ -146,7 +146,7 @@ Route::group(['middleware'=>['auth']], function() {
         Route::get('/create', [PathologyTestSetupController::class, 'create'])->name('create');
         Route::post('/store', [PathologyTestSetupController::class, 'store'])->name('store');
         Route::get('/edit/{id}', [PathologyTestSetupController::class, 'edit'])->name('edit');
-        Route::post('/update', [PathologyTestSetupController::class, 'update'])->name('update');
+        Route::post('/update/{id}', [PathologyTestSetupController::class, 'update'])->name('update');
         Route::get('/delete/{id}', [PathologyTestSetupController::class, 'delete'])->name('delete');
     });
     Route::group(['prefix' => 'pathology/test_category', 'as' => 'test_category.'], function () {
