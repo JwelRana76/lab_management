@@ -3,6 +3,7 @@
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\PathologyPatientController;
+use App\Http\Controllers\PathologyReportSetupController;
 use App\Http\Controllers\PathologyResultHeadingController;
 use App\Http\Controllers\PathologyResultNameController;
 use App\Http\Controllers\PathologyTestCategoryController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\SiteSettingController;
+use App\Service\PathologyPatientReportSetupService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -157,6 +159,15 @@ Route::group(['middleware'=>['auth']], function() {
         Route::get('/edit/{id}', [PathologyTestCategoryController::class, 'edit'])->name('edit');
         Route::post('/update', [PathologyTestCategoryController::class, 'update'])->name('update');
         Route::get('/delete/{id}', [PathologyTestCategoryController::class, 'delete'])->name('delete');
+    });
+    Route::group(['prefix' => 'pathology/report-set', 'as' => 'report_set.'], function () {
+        Route::get('/', [PathologyReportSetupController::class, 'index'])->name('index');
+        Route::get('/create', [PathologyReportSetupController::class, 'create'])->name('create');
+        Route::post('/store', [PathologyReportSetupController::class, 'store'])->name('store');
+        Route::post('/categorystore', [PathologyReportSetupController::class, 'categorystore'])->name('categorystore');
+        Route::get('/edit/{id}', [PathologyReportSetupController::class, 'edit'])->name('edit');
+        Route::post('/update', [PathologyReportSetupController::class, 'update'])->name('update');
+        Route::get('/delete/{id}', [PathologyReportSetupController::class, 'delete'])->name('delete');
     });
     Route::group(['prefix' => 'finance', 'as' => 'due_collection.'], function () {
         Route::get('/due_collection', [FinanceController::class, 'dueCollection'])->name('index');

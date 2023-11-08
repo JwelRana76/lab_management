@@ -81,6 +81,10 @@
   background: white;
 }
 
+.sidebar .nav-item .collapse .collapse-inner .collapse-item {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
 @media only screen and (max-width: 600px) {
   .dataTables_length {
     width: 100% !important;
