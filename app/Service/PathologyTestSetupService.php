@@ -41,6 +41,7 @@ class PathologyTestSetupService
       ->rawColumns(['category', 'action', 'result_name', 'normal_value'])
       ->make(true);
   }
+  
   function Store($data)
   {
     DB::beginTransaction();
@@ -71,7 +72,12 @@ class PathologyTestSetupService
         $setup_result['is_converted'] = $setup_result['pathology_convert_unit_id'] == null ? 0 : 1;
 
         $this->setupmodeResult::create($setup_result);
+
+        if ($data['normal_value'][$key]) {
+          $setup->normal_value = true;
+        }
       }
+      $setup->save();
 
       DB::commit();
       return ['success' => "Pathology Test Setup Inserted Successfully"];

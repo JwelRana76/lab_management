@@ -85,6 +85,10 @@
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
+.editViewPrint {
+  display: flex;
+  gap: 1px;
+}
 @media only screen and (max-width: 600px) {
   .dataTables_length {
     width: 100% !important;

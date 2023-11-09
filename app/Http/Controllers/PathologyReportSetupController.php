@@ -33,19 +33,32 @@ class PathologyReportSetupController extends Controller
     {
         $data = $request->all();
         $message = $this->baseService->store($data);
-        return redirect()->route('pathology.result_heading.index')->with($message);
+        return redirect()->route('report_set.index')->with($message);
     }
 
-    function edit($id)
+    function view()
     {
-        return PathologyResultHeading::findOrFail($id);
+        if (!userHasPermission('pathology_test-index'))
+        return view('not_permitted');
+        $patinets = $this->baseService->view();
+        $columns = [
+            ['name' => 'unique_id', 'data' => 'unique_id'],
+            ['name' => 'name', 'data' => 'name'],
+            ['name' => 'contact', 'data' => 'contact'],
+            ['name' => 'test', 'data' => 'test'],
+            ['name' => 'action', 'data' => 'action'],
+        ];
+        if (request()->ajax()) {
+            return $patinets;
+        }
+        return view('pages.pathology.report_set.view', compact('columns'));
     }
 
     function update(Request $request)
     {
         $data = $request->all();
         $message = $this->baseService->update($data);
-        return redirect()->route('pathology.result_heading.index')->with($message);
+        return redirect()->route('report_set.view')->with($message);
     }
 
     function delete($id)

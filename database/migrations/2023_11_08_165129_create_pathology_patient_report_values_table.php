@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('report_id')->constrained('pathology_patient_reports')->onDelete('cascade');
             $table->integer('result_id');
             $table->string('result_value');
-            $table->string('convert_value');
+            $table->string('convert_value')->nullable();
             $table->timestamps();
         });
     }

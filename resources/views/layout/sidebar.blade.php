@@ -60,7 +60,10 @@
         <div id="pathology" class="collapse {{Request::is('pathology*')?'show':''}}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 @if (userHasPermission('pathology_test-index'))
-                <a class="collapse-item {{Request::is('pathology/report-set')?'active':''}}" href="{{ route('report_set.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Pathology Patient List</a>
+                <a class="collapse-item {{Request::is('pathology/report')?'active':''}}" href="{{ route('report_set.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Pathology List</a>
+                @endif
+                @if (userHasPermission('pathology_test-index'))
+                <a class="collapse-item {{Request::is('pathology/report-view')?'active':''}}" href="{{ route('report_set.view') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Pathology Report</a>
                 @endif
                 @if (userHasPermission('pathology_test-index'))
                 <a class="collapse-item {{Request::is('pathology/test')?'active':''}}" href="{{ route('test.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Test</a>

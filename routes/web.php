@@ -160,12 +160,11 @@ Route::group(['middleware'=>['auth']], function() {
         Route::post('/update', [PathologyTestCategoryController::class, 'update'])->name('update');
         Route::get('/delete/{id}', [PathologyTestCategoryController::class, 'delete'])->name('delete');
     });
-    Route::group(['prefix' => 'pathology/report-set', 'as' => 'report_set.'], function () {
+    Route::group(['prefix' => 'pathology/report/', 'as' => 'report_set.'], function () {
         Route::get('/', [PathologyReportSetupController::class, 'index'])->name('index');
         Route::get('/create', [PathologyReportSetupController::class, 'create'])->name('create');
+        Route::get('/view', [PathologyReportSetupController::class, 'view'])->name('view');
         Route::post('/store', [PathologyReportSetupController::class, 'store'])->name('store');
-        Route::post('/categorystore', [PathologyReportSetupController::class, 'categorystore'])->name('categorystore');
-        Route::get('/edit/{id}', [PathologyReportSetupController::class, 'edit'])->name('edit');
         Route::post('/update', [PathologyReportSetupController::class, 'update'])->name('update');
         Route::get('/delete/{id}', [PathologyReportSetupController::class, 'delete'])->name('delete');
     });

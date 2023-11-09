@@ -1,8 +1,8 @@
-<x-admin title="Pathology Report Set">
-    <x-page-header head="Pathology Report Set" />
+<x-admin title="Pathology Report">
+    <x-page-header head="Pathology Report" />
     
     <div class="row">
-      <x-data-table dataUrl="/pathology/report-set" id="pathologyReportSet" :columns="$columns" />
+      <x-data-table dataUrl="/pathology/report/view" id="pathologyReportview" :columns="$columns" />
     </div>
   @if (request()->patient_id)
       
@@ -34,7 +34,7 @@
             </thead>
           </table>
           <hr>
-          <x-form action="{{ route('report_set.store') }}" method="post">
+          <x-form action="{{ route('report_set.update') }}" method="post">
           @foreach ($patient_tests as $test)
               <h4>Test Name : {{ $test->test->name }}</h4>
               @php
@@ -45,6 +45,11 @@
               <table class="table">
                 @if ($test_setup)
                 @foreach ($test_setup->resutlName as $result)
+                  @php
+                    $resutl_value = App\Models\PathologyPatientReportValue::join('pathology_patient_reports','pathology_patient_reports.id','pathology_patient_report_values.report_id')
+                    ->where('pathology_patient_reports.patient_id',request()->patient_id)
+                    ->where('pathology_patient_report_values.result_id',$result->result_id)->first();
+                  @endphp
                     <tr>
                       <th>
                         {{ $result->result->name }} 
@@ -52,7 +57,10 @@
                       <th>:</th>
                       <th>
                       @if ($result->result_type == 1)
-                        <input type="text" class="form-control" name="result_value[{{ $test->test_id }}][{{ $result->result_id }}]" value="{{ $result->default_value??"N/A" }}">
+                        <input type="text" class="form-control" name="result_value[{{ $test->test_id }}][{{ $result->result_id }}]" 
+                        value="{{ $resutl_value->result_value ?? 'N/A' }}"
+                        {{ request()->has('view') == true ? 'readonly':'' }}
+                        >
                       @endif
                       </th>
                     </tr>
