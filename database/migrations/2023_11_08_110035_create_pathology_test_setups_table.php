@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('test_id')->constrained('pathology_tests')->onDelete('cascade');
             $table->integer('result_no');
-            $table->boolean('normal_value')->default(false)->comment('0=No/1=Yes');
+            $table->boolean('is_normal_value')->default(false)->comment('0=No/1=Yes');
             $table->timestamps();
         });
     }

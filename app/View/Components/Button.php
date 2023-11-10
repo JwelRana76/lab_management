@@ -14,6 +14,7 @@ class Button extends Component
     public function __construct(
         public $class = '',
         public $value = '',
+        public $id = null,
     ) {
         //
     }

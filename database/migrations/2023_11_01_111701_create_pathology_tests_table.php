@@ -20,6 +20,7 @@ return new class extends Migration
             $table->double('referral_fee_percent');
             $table->double('referral_fee_amount');
             $table->boolean('is_active')->default(true);
+            $table->string('specimen')->nullable();
             $table->timestamps();
         });
     }

@@ -1,1 +1,1 @@
-<input class="btn mt-3 {{ $class==''?'btn-primary':$class }}" type="submit" value="{{ $value==''?'Submit':$value}}">
+<input class="btn mt-3 {{ $class==''?'btn-primary':$class }}" id="{{ $id }}" type="submit" value="{{ $value==''?'Submit':$value}}">

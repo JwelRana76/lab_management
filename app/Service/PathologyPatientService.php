@@ -75,6 +75,7 @@ class PathologyPatientService extends Service
   {
     DB::beginTransaction();
     try {
+      $patient_data['user_id'] = auth()->user()->id;
       $patient_data['name'] = $data['name'];
       $patient_data['age'] = $data['age'];
       $patient_data['contact'] = $data['contact'];
@@ -87,7 +88,7 @@ class PathologyPatientService extends Service
       $patient_data['discount_amount'] = $data['discount_amount'];
       $patient_data['discount_percent'] = $data['discount_percent'];
       $patient_data['grand_total'] = $data['total_payable'];
-      $patient_data['paid'] = $data['paid'];
+      $patient_data['paid'] = $data['paid'] ?? 0;
       $patient = PathologyPatient::create($patient_data);
 
       $tests = $data['test_id'];

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('pathology_test_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('sub_category')->nullable();
             $table->string('code');
             $table->boolean('is_active')->default(true);
             $table->timestamps();

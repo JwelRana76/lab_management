@@ -74,7 +74,7 @@ class PathologyTestSetupService
         $this->setupmodeResult::create($setup_result);
 
         if ($data['normal_value'][$key]) {
-          $setup->normal_value = true;
+          $setup->is_normal_value = true;
         }
       }
       $setup->save();

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PathologyPatient;
+use App\Models\PathologyTest;
+use App\Models\PatientTest;
 use App\Service\PathologyPatientReportSetupService;
 use Illuminate\Http\Request;
 
@@ -65,5 +68,25 @@ class PathologyReportSetupController extends Controller
     {
         $message = $this->baseService->delete($id);
         return redirect()->route('pathology.result_heading.index')->with($message);
+    }
+    function reportPrint(Request $request)
+    {
+        $tests = $request->test_id;
+        $pathology_test = [];
+        foreach ($tests as $key => $test) {
+            $find_test = PathologyTest::find($test);
+            if (in_array($find_test->pathology_test_category_id, $pathology_test)) {
+            } else {
+                array_push($pathology_test, $find_test->pathology_test_category_id);
+            }
+        }
+        $patient = PathologyPatient::findOrFail($request->patient_id);
+        return view('pages.pathology.report_set.print2', compact('patient', 'pathology_test', 'tests'));
+    }
+    function findtest($id)
+    {
+        $pathology_test = PatientTest::where('patient_id', $id)
+            ->join('pathology_tests', 'pathology_tests.id', 'patient_tests.test_id')->get();
+        return $pathology_test;
     }
 }

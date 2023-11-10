@@ -17,8 +17,8 @@
   <x-modal id="create_category">
     <form action="{{ route('test_category.categorystore') }}" method="post">
       @csrf
-      <x-input id="category_name" required />
-      <x-input id="category_code" required />
+      <x-input id="name" required />
+      <x-input id="code" required />
       <button class="btn btn-primary" type="submit">Save</button>
     </form>
   </x-modal>

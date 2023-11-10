@@ -77,17 +77,45 @@
     </div>
   @endif
 
+  <x-modal id="report_print">
+    <x-form action="{{ route('report_set.print') }}" method="get" target="_blank">
+      <input type="hidden" name="patient_id" id="patient_id">
+      <div class="test_list">
+
+      </div>
+      <x-button id="print_button"/>
+    </x-form>
+  </x-modal>
   
 
   @push('js')
       <script>
-        function editUnit(Id){
-        $.get('/pathology/result-name/edit/'+Id,
-        function(data){
-          $('#edit_resutl_name #result_name_id').val(data.id);
-          $('#edit_resutl_name #name').val(data.name);
-        })
-      }
+        let hasId = @json($patient_id ?? false);
+        
+        if(hasId != false){
+            print_report(hasId);
+        }
+        function print_report(Id){
+            console.log(Id);
+            $('.test_list').html(null);
+            $('#report_print').modal('show');
+            $.get("/pathology/report/findtest/"+Id,
+                function (item) {
+                    item.map(function(test){
+                        $('#patient_id').val(Id);
+                        $('.test_list').append(`
+                            <div class="">
+                                <input type="checkbox" name="test_id[]" value="${test.id}" class="mr-3"><label>${test.name}</label>
+                            </div>
+                        `);
+                    })
+                }
+            );
+            
+        }
+        $('#print_button').on('click', function () {
+          $('#report_print').modal('hide');
+        });
       </script>
   @endpush
 

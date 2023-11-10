@@ -10,4 +10,9 @@ class PathologyPatientReportValue extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    function result()
+    {
+        return $this->belongsTo(PathologyResultName::class, 'result_id', 'id');
+    }
 }

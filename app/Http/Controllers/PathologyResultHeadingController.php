@@ -26,6 +26,9 @@ class PathologyResultHeadingController extends Controller
 
     function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|unique:pathology_result_headings',
+        ]);
         $data = $request->all();
         $message = $this->baseService->store($data);
         return redirect()->route('pathology.result_heading.index')->with($message);

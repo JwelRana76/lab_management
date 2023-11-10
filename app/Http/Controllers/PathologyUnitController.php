@@ -26,6 +26,9 @@ class PathologyUnitController extends Controller
 
     function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|unique:pathology_units',
+        ]);
         $data = $request->all();
         $message = $this->baseService->store($data);
         return redirect()->route('pathology.unit.index')->with($message);

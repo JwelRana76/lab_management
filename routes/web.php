@@ -167,6 +167,9 @@ Route::group(['middleware'=>['auth']], function() {
         Route::post('/store', [PathologyReportSetupController::class, 'store'])->name('store');
         Route::post('/update', [PathologyReportSetupController::class, 'update'])->name('update');
         Route::get('/delete/{id}', [PathologyReportSetupController::class, 'delete'])->name('delete');
+
+        Route::get('/findtest/{id}', [PathologyReportSetupController::class, 'findtest']);
+        Route::get('/print', [PathologyReportSetupController::class, 'reportPrint'])->name('print');
     });
     Route::group(['prefix' => 'finance', 'as' => 'due_collection.'], function () {
         Route::get('/due_collection', [FinanceController::class, 'dueCollection'])->name('index');

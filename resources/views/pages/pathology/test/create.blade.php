@@ -10,6 +10,7 @@
         </div>
         <x-input id="test_rate" class="col-md-4" required />
         <x-input id="referral_fee_percent" class="col-md-4" required />
+        <x-input id="speciman" class="col-md-4" />
       </div>
       <x-button value="Save" />
     </x-form>

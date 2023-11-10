@@ -17,7 +17,7 @@ class PathologyTestCategoryController extends Controller
     {
         $validatedData = $request->validate([
             'category_name' => 'required|string',
-            'category_code' => 'required|string',
+            'category_code' => 'required|string|unique:pathology_test_categories,code',
         ]);
 
         // Create a new category using the validated data
@@ -31,14 +31,14 @@ class PathologyTestCategoryController extends Controller
     function categorystore(Request $request)
     {
         $validatedData = $request->validate([
-            'category_name' => 'required|string',
-            'category_code' => 'required|string|unique:patholoty_test_categories',
+            'name' => 'required|string',
+            'code' => 'required|string|unique:pathology_test_categories',
         ]);
 
         // Create a new category using the validated data
         $category = PathologyTestCategory::create([
-            'name' => $validatedData['category_name'],
-            'code' => $validatedData['category_code'],
+            'name' => $validatedData['name'],
+            'code' => $validatedData['code'],
         ]);
         return redirect()->route('test.index')->with('success', 'Pathology Test Category Created Successfully');
     }
