@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PathologyPatient;
+use App\Models\PathologyReportChecker;
 use App\Models\PathologyTest;
 use App\Models\PatientTest;
 use App\Service\PathologyPatientReportSetupService;
@@ -88,5 +89,15 @@ class PathologyReportSetupController extends Controller
         $pathology_test = PatientTest::where('patient_id', $id)
             ->join('pathology_tests', 'pathology_tests.id', 'patient_tests.test_id')->get();
         return $pathology_test;
+    }
+    function reportChecker()
+    {
+        $checker = PathologyReportChecker::first();
+        return view('pages.pathology.checker', compact('checker'));
+    }
+    function reportCheckerUpdate(Request $request, $id)
+    {
+        PathologyReportChecker::findOrFail($id)->update($request->all());
+        return back()->with('success', 'Pathology Report Checker Updated Successfully');
     }
 }

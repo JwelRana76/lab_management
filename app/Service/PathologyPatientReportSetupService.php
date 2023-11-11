@@ -58,7 +58,6 @@ class PathologyPatientReportSetupService extends Service
           <button type="submit" class="btn btn-sm btn-primary" name="patient_id" value="' . $item->id . '">Edit</button>
           </form>';
       $action .= '<button type="button" onclick="print_report(' . $item->id . ')" class="btn btn-sm btn-primary" name="patient_id">Print</button>';
-      $action .= '<a target="_blank" href="' . route("report_set.print", $item->id) . '" class="btn btn-sm btn-primary">Print</a>';
         return '<div class="editViewPrint">' . $action . '</div>';
       })
       ->rawColumns(['test', 'action'])

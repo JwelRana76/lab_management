@@ -170,6 +170,9 @@ Route::group(['middleware'=>['auth']], function() {
 
         Route::get('/findtest/{id}', [PathologyReportSetupController::class, 'findtest']);
         Route::get('/print', [PathologyReportSetupController::class, 'reportPrint'])->name('print');
+
+        Route::get('/checker', [PathologyReportSetupController::class, 'reportChecker'])->name('checker');
+        Route::post('/checker/{id}', [PathologyReportSetupController::class, 'reportCheckerUpdate'])->name('checker.update');
     });
     Route::group(['prefix' => 'finance', 'as' => 'due_collection.'], function () {
         Route::get('/due_collection', [FinanceController::class, 'dueCollection'])->name('index');

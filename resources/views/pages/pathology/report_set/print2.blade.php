@@ -259,17 +259,24 @@
         @php
             $setup = App\Models\PathologyTestSetup::join('pathology_test_setup_results','pathology_test_setup_results.pathology_test_setup_id','pathology_test_setups.id')
                     ->where('pathology_test_setups.test_id',$patienttest->test_id)
+                    ->select('pathology_test_setup_results.heading_id as heading_id')
+                    ->groupBy('heading_id')
                     ->get();
         @endphp
             <p style="margin-top:20px !important"></p>
-            {{-- @foreach($setup as $key=>$item) --}}
+            @foreach($setup as $key=>$item)
                 
                 @php
-                    $result = App\Models\PathologyPatientReport::join('pathology_patient_report_values','pathology_patient_report_values.report_id','pathology_patient_reports.id')
-                            ->join('pathology_test_setup_results','pathology_test_setup_results.result_id','pathology_patient_report_values.result_id')
-                            ->where('pathology_patient_reports.patient_id',$patient->id)
-                            ->where('pathology_patient_reports.test_id',$patienttest->test_id)
+                    $result = App\Models\PathologyTestSetup::where('pathology_test_setups.test_id',$patienttest->test_id)
+                            ->join('pathology_test_setup_results','pathology_test_setup_results.pathology_test_setup_id','pathology_test_setups.id')
+                            ->where('pathology_test_setup_results.heading_id',$item->heading_id)
+                            ->select('pathology_test_setups.is_normal_value',
+                                'pathology_test_setup_results.result_id','pathology_test_setup_results.heading_id',
+                                'pathology_test_setup_results.pathology_unit_id','pathology_test_setup_results.pathology_convert_unit_id')
                             ->get();
+                    if($item->heading_id != 0){
+                        $heading = App\Models\PathologyResultHeading::findOrFail($item->heading_id);
+                    }
                 @endphp
                 @if($ptest->code == 9147)
                 <table class="table urine_test details_table"  style="margin:0px">
@@ -278,8 +285,8 @@
                             <tr>
                                 <th class="w-50">Test Name</th>
                                 <th class="w-25">Result</th>
-                                @if($item->is_normal_value == 1)
-                                <th>Normal Value</th>
+                                @if($result[0]->is_normal_value == true)
+                                <th class="w-25">Normal Value</th>
                                 @endif
                             </tr>
                         </thead>
@@ -289,45 +296,33 @@
                     @endif
                     <tbody  style="margin:5px">
                         <tr>
-                            <td colspan="2"><h6 style="margin:0px;font-size:14px">{{find_heading($item->heading_id)->name ?? null}}</h6></td>
+                            <td colspan="2"><h6 style="margin:0px;font-size:14px">{{ $heading->name ?? null }}</h6></td>
                         </tr>
-                       @foreach($result as $res)
-                             @php
-                                $result_set = App\Models\Pathology\PathologyTestSetupResult::find($res->id);
-                                $result_value = App\Models\Pathology\PathologyReport::where(['patient_id'=>$patient->id,'test_id'=>$test])
-                                    ->join('pathology_report_types','pathology_report_types.pathology_report_id','pathology_reports.id')
-                                    ->select('pathology_report_types.*')->first();
-                                $keys++;
-                                if($pathology_report[$keys]->is_converted == 1){
-                                    if($pathology_report[$keys]->calculate_operator == '*'){
-                                        $convert_value = ($pathology_report[$keys]->result_value * 1) * $pathology_report[$keys]->calculation_value;
-                                    }elseif($result_set->calculate_operator == '/'){
-                                        $convert_value = $pathology_report[$keys]->result_value / $pathology_report[$keys]->calculate_value;
-                                    }elseif($result_set->calculate_operator == '+'){
-                                        $convert_value = $pathology_report[$keys]->result_value + $pathology_report[$keys]->calculate_value;
-                                    }elseif($result_set->calculate_operator == '-'){
-                                        $convert_value = $pathology_report[$keys]->result_value - $pathology_report[$keys]->calculate_value;
-                                    }else{
-                                        $convert_value = $pathology_report[$keys]->result_value % $pathology_report[$keys]->calculate_value;
-                                    }
-                                }
-                                if($result_set->result_type == 1){
-                                    $result = $pathology_report[$keys]->result_value;
+                        @foreach($result as $key=>$res)
+                            @php
+                                $report_result = App\Models\PathologyPatientReport::where('patient_id',$patient->id)
+                                        ->join('pathology_patient_report_values','pathology_patient_report_values.report_id','pathology_patient_reports.id')
+                                        ->where('pathology_patient_report_values.result_id',$res->result_id)
+                                        ->first();
+                                $result_name = App\Models\PathologyTestSetupResult::where('result_id',$res->result_id)->first();
+                                if ($result_name->pathology_unit_id != null) {
+                                    $unit = App\Models\PathologyUnit::findOrFail($result_name->pathology_unit_id);
                                 }else{
-                                    if($pathology_report[$keys]->result_value == 1){
-                                        $result = "Positive";
-                                    }else{
-                                        $result = "Negative";
-                                    }
-                                }   
+                                    $unit = null;
+                                }
+                                if ($result_name->pathology_convert_unit_id != null) {
+                                    $convert_unit = App\Models\PathologyUnit::findOrFail($result_name->pathology_convert_unit_id);
+                                }else{
+                                    $convert_unit = null;
+                                }
                             @endphp
                             <tr  style="margin:0px">
-                                <td class="w-50" style="margin:0px"><span class="mr-5">{{$result_set->result->name}}</span></td> 
-                                <td class="w-25" style="margin:0px"> <span class="mr-5">{{$result}} {{find_unit($result_set->unit_id)->name ?? null}}</span> 
-                                    <span> {{$result_set->is_converted == 1 ? $convert_value:''}}{{find_unit($result_set->convert_unit)->name ?? null}}</span></td>
+                                <td class="w-50" style="margin:0px"><span class="mr-5">{{$result_name->result->name ?? null}}</span></td> 
+                                <td class="w-25" style="margin:0px"> <span class="mr-5">{{$report_result->result_value}} {{ $unit->name ??null }} </span> 
+                                    <span> {{$result_name->is_converted == 1 ? $report_result->convert_value:''}} {{ $convert_unit->name ??null }}</span></td>
                                     
-                                @if($is_normal_value == 1)
-                                <td class="w-25 style="margin:0px"">{{$result_set->normal_value ?? null}}</td>
+                                @if($result[0]->is_normal_value == true)
+                                <td class="w-25" style="margin:0px">{{$report_result->normal_value ?? null}}</td>
                                 @endif
                             </tr>
                         @endforeach
@@ -349,48 +344,55 @@
                     <tbody  style="margin:0px">
                         @foreach($result as $key=>$res)
                             @php
-                                $result_name = App\Models\PathologyResultName::findOrFail($res->result_id);
-                                if ($res->pathology_unit_id != null) {
-                                    $unit = App\Models\PathologyUnit::findOrFail($res->pathology_unit_id);
+                                $report_result = App\Models\PathologyPatientReport::where('patient_id',$patient->id)
+                                        ->join('pathology_patient_report_values','pathology_patient_report_values.report_id','pathology_patient_reports.id')
+                                        ->where('pathology_patient_report_values.result_id',$res->result_id)
+                                        ->first();
+                                $result_name = App\Models\PathologyTestSetupResult::where('result_id',$res->result_id)->first();
+                                if ($result_name->pathology_unit_id != null) {
+                                    $unit = App\Models\PathologyUnit::findOrFail($result_name->pathology_unit_id);
                                 }else{
                                     $unit = null;
                                 }
-                                if ($res->pathology_convert_unit_id != null) {
-                                    $convert_unit = App\Models\PathologyUnit::findOrFail($res->pathology_convert_unit_id);
+                                if ($result_name->pathology_convert_unit_id != null) {
+                                    $convert_unit = App\Models\PathologyUnit::findOrFail($result_name->pathology_convert_unit_id);
                                 }else{
                                     $convert_unit = null;
                                 }
-                                
                             @endphp
                             <tr  style="margin:0px">
-                                <td class="w-40" style="margin:0px"><span class="mr-5">{{$result_name->name ?? null}}</span></td> 
-                                <td class="w-30" style="margin:0px"> <span class="mr-5">{{$res->result_value}} {{ $unit->name ??null }} </span> 
-                                    <span> {{$res->is_converted == 1 ? $res->convert_value:''}} {{ $convert_unit->name ??null }}</span></td>
+                                <td class="w-40" style="margin:0px"><span class="mr-5">{{$result_name->result->name ?? null}}</span></td> 
+                                <td class="w-30" style="margin:0px"> <span class="mr-5">{{$report_result->result_value}} {{ $unit->name ??null }} </span> 
+                                    <span> {{$result_name->is_converted == 1 ? $report_result->convert_value:''}} {{ $convert_unit->name ??null }}</span></td>
                                     
                                 @if($result[0]->normal_value != null)
-                                <td class="w-30" style="margin:0px">{{$res->normal_value ?? null}}</td>
+                                <td class="w-30" style="margin:0px">{{$report_result->normal_value ?? null}}</td>
                                 @endif
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
                 @endif
-            {{-- @endforeach --}}
+            @endforeach
         @endforeach
        
         @endforeach
     </div>
-   <div class="divFooter" style="float:right">
+    @php
+        $checker = App\Models\PathologyReportChecker::first();
+    @endphp
+    @if ($checker->is_active == true)
+    <div class="divFooter" style="float:right">
        <div class="col-md-6">
            <table class="table">
                <tr style="margin-bottom:0px">
                    <td class="mr-50"> Checked By.</td>
                    <td style="width:300px"></td>
-                   <td style="line-height:18px"><b>MD. ABU SAYED</b> <br>
-                   DMT ( NMI) Dinajpur  FT ( RpMCH)<br>
-                   Medical Technologist Lab <br>
-                   ENT Care & Audiology <br>
-                   Center: Saidpur, Nilphamari
+                   <td style="line-height:18px"><b>{{ $checker->name }}</b> <br>
+                   {{ $checker->degree }}<br>
+                   {{ $checker->designation }} <br>
+                   {{ $checker->institute }} <br>
+                   {{ $checker->address }}
                    </td>
                </tr>
                <tr>
@@ -401,7 +403,8 @@
                </tr>
            </table>
        </div>
-   </div>
+    </div>
+    @endif
 </div>
 
 <script type="text/javascript">

@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ReligionSeeder::class);
         $this->call(GenderSeeder::class);
         $this->call(BloogGroupSeeder::class);
+        $this->call(PathologyReportCheckerSeeder::class);
     }
 }
