@@ -3,11 +3,21 @@
     <a href="#" class="btn btn-sm btn-primary m-2" data-target="#add_unit" data-toggle="modal" >
         <i class="fas fa-fw fa-plus"></i> Add Result Name
     </a>
+    <a href="#" class="btn btn-sm btn-primary m-2" data-target="#import_name" data-toggle="modal" >
+        <i class="fas fa-fw fa-upload"></i> Import Result Name
+    </a>
     <div class="row">
       <x-data-table dataUrl="/pathology/result-name" id="pathologyResultName" :columns="$columns" />
     </div>
 
 
+  <x-modal id="import_name">
+    <x-form action="{{ route('pathology.result_name.import') }}" method="post">
+      @csrf
+      <x-input id="result_file" type="file" required />
+      <button class="btn btn-primary" type="submit">Save</button>
+    </x-form>
+  </x-modal>
   <x-modal id="add_unit">
     <form action="{{ route('pathology.result_name.store') }}" method="post">
       @csrf

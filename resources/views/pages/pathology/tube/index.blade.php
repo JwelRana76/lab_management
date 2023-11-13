@@ -3,11 +3,20 @@
     <a href="#" class="btn btn-sm btn-primary m-2" data-target="#add_tube" data-toggle="modal" >
         <i class="fas fa-fw fa-plus"></i> Add Tube
     </a>
+    <a href="#" class="btn btn-sm btn-primary m-2" data-target="#import_tube" data-toggle="modal" >
+        <i class="fas fa-fw fa-upload"></i> Import Tube
+    </a>
     <div class="row">
       <x-data-table dataUrl="/pathology/tube" id="pathologyTube" :columns="$columns" />
     </div>
 
-
+  <x-modal id="import_tube">
+    <x-form action="{{ route('tube.import') }}" method="post">
+      @csrf
+      <x-input id="result_file" type="file" required />
+      <button class="btn btn-primary" type="submit">Save</button>
+    </x-form>
+  </x-modal>
   <x-modal id="add_tube">
     <form action="{{ route('tube.store') }}" method="post">
       @csrf

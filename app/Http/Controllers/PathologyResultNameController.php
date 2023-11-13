@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PathologyResultName;
 use App\Service\PathologyResultNameService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class PathologyResultNameController extends Controller
 {
@@ -50,5 +51,17 @@ class PathologyResultNameController extends Controller
     {
         $message = $this->baseService->delete($id);
         return redirect()->route('pathology.result_name.index')->with($message);
+    }
+
+    function Import(Request $request)
+    {
+        $request->validate([
+            'result_file' => 'required|file|mimes:csv,txt',
+        ]);
+        $message = $this->baseService->Import($request->all());
+        return redirect()->route('pathology.result_name.index')->with($message);
+    }
+    function downloadCSV()
+    {
     }
 }

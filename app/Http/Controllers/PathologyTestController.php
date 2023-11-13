@@ -60,4 +60,13 @@ class PathologyTestController extends Controller
         $message = $this->baseService->testDelete($id);
         return redirect()->route('test.index')->with($message);
     }
+
+    function Import(Request $request)
+    {
+        $request->validate([
+            'result_file' => 'required|file|mimes:csv,txt',
+        ]);
+        $message = $this->baseService->Import($request->all());
+        return redirect()->route('test.index')->with($message);
+    }
 }

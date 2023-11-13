@@ -51,4 +51,12 @@ class PathologyUnitController extends Controller
         $message = $this->baseService->delete($id);
         return redirect()->route('pathology.unit.index')->with($message);
     }
+    function Import(Request $request)
+    {
+        $request->validate([
+            'result_file' => 'required|file|mimes:csv,txt',
+        ]);
+        $message = $this->baseService->Import($request->all());
+        return redirect()->route('pathology.unit.index')->with($message);
+    }
 }

@@ -110,6 +110,8 @@ Route::group(['middleware'=>['auth']], function() {
         Route::get('/edit/{id}', [PathologyTestController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [PathologyTestController::class, 'update'])->name('update');
         Route::get('/delete/{id}', [PathologyTestController::class, 'delete'])->name('delete');
+
+        Route::post('/import', [PathologyTestController::class, 'Import'])->name('import');
     });
     Route::group(['prefix' => 'pathology/tube', 'as' => 'tube.'], function () {
         Route::get('/', [PathologyTubeController::class, 'index'])->name('index');
@@ -118,6 +120,8 @@ Route::group(['middleware'=>['auth']], function() {
         Route::get('/edit/{id}', [PathologyTubeController::class, 'edit'])->name('edit');
         Route::post('/update', [PathologyTubeController::class, 'update'])->name('update');
         Route::get('/delete/{id}', [PathologyTubeController::class, 'delete'])->name('delete');
+
+        Route::post('/import', [PathologyTubeController::class, 'Import'])->name('import');
     });
     Route::group(['prefix' => 'pathology/unit', 'as' => 'pathology.unit.'], function () {
         Route::get('/', [PathologyUnitController::class, 'index'])->name('index');
@@ -126,6 +130,8 @@ Route::group(['middleware'=>['auth']], function() {
         Route::get('/edit/{id}', [PathologyUnitController::class, 'edit'])->name('edit');
         Route::post('/update', [PathologyUnitController::class, 'update'])->name('update');
         Route::get('/delete/{id}', [PathologyUnitController::class, 'delete'])->name('delete');
+
+        Route::post('/import', [PathologyUnitController::class, 'Import'])->name('import');
     });
     Route::group(['prefix' => 'pathology/result-name', 'as' => 'pathology.result_name.'], function () {
         Route::get('/', [PathologyResultNameController::class, 'index'])->name('index');
@@ -134,6 +140,10 @@ Route::group(['middleware'=>['auth']], function() {
         Route::get('/edit/{id}', [PathologyResultNameController::class, 'edit'])->name('edit');
         Route::post('/update', [PathologyResultNameController::class, 'update'])->name('update');
         Route::get('/delete/{id}', [PathologyResultNameController::class, 'delete'])->name('delete');
+
+        Route::post('/import', [PathologyResultNameController::class, 'Import'])->name('import');
+        Route::get('/downloadcsv', [PathologyResultNameController::class, 'downloadCSV'])->name('downloadcsv');
+        
     });
     Route::group(['prefix' => 'pathology/result-heading', 'as' => 'pathology.result_heading.'], function () {
         Route::get('/', [PathologyResultHeadingController::class, 'index'])->name('index');

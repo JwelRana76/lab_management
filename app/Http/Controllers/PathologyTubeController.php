@@ -48,4 +48,13 @@ class PathologyTubeController extends Controller
         $message = $this->baseService->delete($id);
         return redirect()->route('tube.index')->with($message);
     }
+
+    function Import(Request $request)
+    {
+        $request->validate([
+            'result_file' => 'required|file|mimes:csv,txt',
+        ]);
+        $message = $this->baseService->Import($request->all());
+        return redirect()->route('tube.index')->with($message);
+    }
 }

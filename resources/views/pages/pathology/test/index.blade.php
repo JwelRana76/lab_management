@@ -9,11 +9,20 @@
     <a href="#" class="btn btn-sm btn-primary m-2" data-target="#category_list" data-toggle="modal" >
         <i class="fas fa-fw fa-list"></i> Category List
     </a>
+    <a href="#" class="btn btn-sm btn-primary m-2" data-target="#import_test" data-toggle="modal" >
+        <i class="fas fa-fw fa-upload"></i> Import Test
+    </a>
     <div class="row">
       <x-data-table dataUrl="/pathology/test" id="pathologyTest" :columns="$columns" />
     </div>
 
-
+  <x-modal id="import_test">
+    <x-form action="{{ route('test.import') }}" method="post">
+      @csrf
+      <x-input id="result_file" type="file" required />
+      <button class="btn btn-primary" type="submit">Save</button>
+    </x-form>
+  </x-modal>
   <x-modal id="create_category">
     <form action="{{ route('test_category.categorystore') }}" method="post">
       @csrf
