@@ -1,4 +1,4 @@
-<div class="input-group mb-3 mr-sm- {{ $class }}">
+<div class="input-group mb-3 mr-sm- {{ $class ?? '' }}">
     @if ($type != 'hidden')
     <div class="input-group-prepend" style="width: 40%">
         <div class="input-group-text"  style="width: 100%">{{ ucwords(str_replace('_', ' ', $id)) }}</div>

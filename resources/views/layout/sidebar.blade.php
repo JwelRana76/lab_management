@@ -143,6 +143,26 @@
         </div>
     </li>
     @endif
+    @if (userHasPermission('report-module'))
+    <li class="nav-item">
+        <a class="nav-link {{Request::is('report*')?'':'collapsed'}}" href="#" data-toggle="collapse" data-target="#reportMenu"
+            aria-expanded="true" aria-controls="reportMenu">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Report</span>
+        </a>
+        <div id="reportMenu" class="collapse {{Request::is('report*')?'show':''}}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                @if (userHasPermission('referral-store'))
+                <a class="collapse-item {{Request::is('report/patient')?'active':''}}" href="{{ route('report.patient') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Patient Report</a>
+                <a class="collapse-item {{Request::is('report/referral')?'active':''}}" href="{{ route('report.referral') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Referral Refer Report</a>
+                <a class="collapse-item {{Request::is('report/doctor')?'active':''}}" href="{{ route('report.doctor') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Doctor Refer Report</a>
+                <a class="collapse-item {{Request::is('report/referral/payment')?'active':''}}" href="{{ route('report.referral.payment') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Referral Payment Report</a>
+                <a class="collapse-item {{Request::is('report/doctor/payment')?'active':''}}" href="{{ route('report.doctor.payment') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Doctor Payment Report</a>
+                @endif
+            </div>
+        </div>
+    </li>
+    @endif
     <!-- Nav Item - Pages Collapse Menu -->
     @if (userHasPermission('setting-index') || Auth::user()->id == 1 )
     <li class="nav-item">

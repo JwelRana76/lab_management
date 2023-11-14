@@ -83,6 +83,9 @@ class PathologyPatientService extends Service
       $patient_data['age_type'] = $data['age_type'];
       $patient_data['doctor_id'] = $data['doctor_id'];
       $patient_data['referral_id'] = $data['referral_id'];
+      if ($data['doctor_id'] != null) {
+        $patient_data['referral_id'] = null;
+      }
       $patient_data['gender_id'] = $data['gender_id'];
       $patient_data['total'] = $data['sub_total'];
       $patient_data['discount_amount'] = $data['discount_amount'];
@@ -131,6 +134,9 @@ class PathologyPatientService extends Service
       $patient_data['age_type'] = $data['age_type'];
       $patient_data['doctor_id'] = $data['doctor_id'];
       $patient_data['referral_id'] = $data['referral_id'];
+      if ($data['doctor_id'] != null) {
+        $patient_data['referral_id'] = null;
+      }
       $patient_data['gender_id'] = $data['gender_id'];
       $patient_data['total'] = $data['sub_total'];
       $patient_data['discount_amount'] = $data['discount_amount'];

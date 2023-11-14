@@ -13,6 +13,7 @@ use App\Http\Controllers\PathologyTubeController;
 use App\Http\Controllers\PathologyUnitController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ReferralController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\SiteSettingController;
@@ -187,6 +188,13 @@ Route::group(['middleware'=>['auth']], function() {
     Route::group(['prefix' => 'finance', 'as' => 'due_collection.'], function () {
         Route::get('/due_collection', [FinanceController::class, 'dueCollection'])->name('index');
         Route::post('/due_collection/store/{id} ', [FinanceController::class, 'dueCollectionStore'])->name('store');
+    });
+    Route::group(['prefix' => 'report', 'as' => 'report.'], function () {
+        Route::get('/patient', [ReportController::class, 'patient'])->name('patient');
+        Route::get('/referral', [ReportController::class, 'referral'])->name('referral');
+        Route::get('/doctor', [ReportController::class, 'doctor'])->name('doctor');
+        Route::get('/referral/payment', [ReportController::class, 'referralPayment'])->name('referral.payment');
+        Route::get('/doctor/payment', [ReportController::class, 'doctorPayment'])->name('doctor.payment');
     });
     
 });
