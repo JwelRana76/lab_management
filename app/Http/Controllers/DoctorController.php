@@ -19,6 +19,9 @@ class DoctorController extends Controller
 
     function index()
     {
+        if (!userHasPermission('doctor-index'))
+        return view('404');
+
         $doctors = $this->baseService->Index();
         $columns = Doctor::$columns;
         if (request()->ajax()) {
@@ -28,6 +31,8 @@ class DoctorController extends Controller
     }
     function create()
     {
+        if (!userHasPermission('doctor-store'))
+        return view('404');
         $blood_group = BloodGroup::select('id', 'name')->get();
         $religion = Religion::select('id', 'name')->get();
         $gender = Gender::select('id', 'name')->get();
@@ -35,6 +40,8 @@ class DoctorController extends Controller
     }
     function store(Request $request)
     {
+        if (!userHasPermission('doctor-store'))
+        return view('404');
         $request->validate([
             'name' => 'required',
             'contact' => 'required|unique:doctors',
@@ -49,6 +56,8 @@ class DoctorController extends Controller
     }
     function edit($id)
     {
+        if (!userHasPermission('doctor-update'))
+        return view('404');
         $blood_group = BloodGroup::select('id', 'name')->get();
         $religion = Religion::select('id', 'name')->get();
         $gender = Gender::select('id', 'name')->get();
@@ -57,6 +66,8 @@ class DoctorController extends Controller
     }
     function update(Request $request, $id)
     {
+        if (!userHasPermission('doctor-update'))
+        return view('404');
         $request->validate([
             'name' => 'required',
             'contact' => 'required',
@@ -71,6 +82,8 @@ class DoctorController extends Controller
     }
     function delete($id)
     {
+        if (!userHasPermission('doctor-delete'))
+        return view('404');
         $message = $this->baseService->delete($id);
         return redirect()->route('doctor.index')->with($message);
     }

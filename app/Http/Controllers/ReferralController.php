@@ -19,6 +19,8 @@ class ReferralController extends Controller
 
     function index()
     {
+        if (!userHasPermission('referral-index'))
+        return view('404');
         $referrals = $this->baseService->Index();
         $columns = Referral::$columns;
         if (request()->ajax()) {
@@ -28,12 +30,16 @@ class ReferralController extends Controller
     }
     function create()
     {
+        if (!userHasPermission('referral-store'))
+        return view('404');
         $religion = Religion::select('id', 'name')->get();
         $gender = Gender::select('id', 'name')->get();
         return view('pages.referral.create', compact('gender', 'religion'));
     }
     function store(Request $request)
     {
+        if (!userHasPermission('referral-store'))
+        return view('404');
         $request->validate([
             'name' => 'required',
             'contact' => 'required|unique:referrals',
@@ -46,6 +52,8 @@ class ReferralController extends Controller
     }
     function edit($id)
     {
+        if (!userHasPermission('referral-update'))
+        return view('404');
         $religion = Religion::select('id', 'name')->get();
         $gender = Gender::select('id', 'name')->get();
         $referral = Referral::findOrFail($id);
@@ -53,6 +61,8 @@ class ReferralController extends Controller
     }
     function update(Request $request, $id)
     {
+        if (!userHasPermission('referral-update'))
+        return view('404');
         $request->validate([
             'name' => 'required',
             'contact' => 'required',
@@ -65,6 +75,8 @@ class ReferralController extends Controller
     }
     function delete($id)
     {
+        if (!userHasPermission('referral-delete'))
+        return view('404');
         $message = $this->baseService->delete($id);
         return redirect()->route('referral.index')->with($message);
     }

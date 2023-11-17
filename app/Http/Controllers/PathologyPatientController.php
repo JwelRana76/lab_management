@@ -8,6 +8,7 @@ use App\Models\PathologyPatient;
 use App\Models\PathologyTest;
 use App\Models\PathologyTube;
 use App\Models\Referral;
+use App\Models\RoleHasPermission;
 use App\Service\PathologyPatientService;
 use Illuminate\Http\Request;
 
@@ -21,6 +22,8 @@ class PathologyPatientController extends Controller
     }
     function index()
     {
+        if (!userHasPermission('patient-index'))
+        return view('404');
         $patients = $this->baseService->index();
         $columns = PathologyPatient::$columns;
         if (request()->ajax()) {
@@ -31,6 +34,8 @@ class PathologyPatientController extends Controller
 
     function create()
     {
+        if (!userHasPermission('patient-store'))
+        return view('404');
         $genders = Gender::all();
         $doctors = Doctor::where('is_active', 1)->get();
         $referrals = Referral::where('is_active', 1)->get();
@@ -59,6 +64,8 @@ class PathologyPatientController extends Controller
     }
     function edit($id)
     {
+        if (!userHasPermission('patient-update'))
+        return view('404');
         $genders = Gender::all();
         $doctors = Doctor::where('is_active', 1)->get();
         $referrals = Referral::where('is_active', 1)->get();
@@ -75,6 +82,8 @@ class PathologyPatientController extends Controller
     }
     function delete($id)
     {
+        if (!userHasPermission('patient-delete'))
+        return view('404');
         $message = $this->baseService->delete($id);
         return redirect()->route('pathology.patient.index')->with($message);
     }

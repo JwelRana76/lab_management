@@ -10,7 +10,7 @@
             <x-inline-input id="end_date"  type="date" value="{{ request()->end_date ?? date('Y-m-d') }}" />
           </div>
           <div class="col-md-4">
-            <x-inline-select id="doctor_name" class="" name="doctor_id" :options="$doctors" />
+            <x-inline-select id="doctor_name" class="" selctedId="{{ request()->doctor_id }}" name="doctor_id" :options="$doctors" />
           </div>
           <div>
             <button class="btn btn-sm btn-primary mb-3">Search</button>

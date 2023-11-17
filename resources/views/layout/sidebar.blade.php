@@ -59,28 +59,28 @@
         </a>
         <div id="pathology" class="collapse {{Request::is('pathology*')?'show':''}}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                @if (userHasPermission('pathology_test-index'))
+                @if (userHasPermission('pathology-index'))
                 <a class="collapse-item {{Request::is('pathology/report')?'active':''}}" href="{{ route('report_set.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Pathology List</a>
                 @endif
-                @if (userHasPermission('pathology_test-index'))
+                @if (userHasPermission('pathology-index'))
                 <a class="collapse-item {{Request::is('pathology/report-view')?'active':''}}" href="{{ route('report_set.view') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Pathology Report</a>
                 @endif
-                @if (userHasPermission('pathology_test-index'))
+                @if (userHasPermission('pathology-index'))
                 <a class="collapse-item {{Request::is('pathology/test')?'active':''}}" href="{{ route('test.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Test</a>
                 @endif
-                @if (userHasPermission('pathology_test-index'))
+                @if (userHasPermission('pathology-index'))
                 <a class="collapse-item {{Request::is('pathology/tube')?'active':''}}" href="{{ route('tube.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Tube</a>
                 @endif
-                @if (userHasPermission('pathology_test-index'))
+                @if (userHasPermission('pathology-index'))
                 <a class="collapse-item {{Request::is('pathology/unit')?'active':''}}" href="{{ route('pathology.unit.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Unit</a>
                 @endif
-                @if (userHasPermission('pathology_test-index'))
+                @if (userHasPermission('pathology-index'))
                 <a class="collapse-item {{Request::is('pathology/result-name')?'active':''}}" href="{{ route('pathology.result_name.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Result Name</a>
                 @endif
-                @if (userHasPermission('pathology_test-index'))
+                @if (userHasPermission('pathology-index'))
                 <a class="collapse-item {{Request::is('pathology/result-heading')?'active':''}}" href="{{ route('pathology.result_heading.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Result Heading</a>
                 @endif
-                @if (userHasPermission('pathology_test-index'))
+                @if (userHasPermission('pathology-index'))
                 <a class="collapse-item {{Request::is('pathology/test-setup/create')?'active':''}}" href="{{ route('pathology.test_setup.create') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Add Pathology Setup</a>
                 <a class="collapse-item {{Request::is('pathology/test-setup')?'active':''}}" href="{{ route('pathology.test_setup.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Pathology Setup List</a>
                 <a class="collapse-item {{Request::is('pathology/report/checker')?'active':''}}" href="{{ route('report_set.checker') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Report Checker</a>
@@ -127,7 +127,7 @@
         </div>
     </li>
     @endif
-    @if (userHasPermission('referral-module'))
+    @if (userHasPermission('finance-module'))
     <li class="nav-item">
         <a class="nav-link {{Request::is('finance*')?'':'collapsed'}}" href="#" data-toggle="collapse" data-target="#financeMenu"
             aria-expanded="true" aria-controls="financeMenu">
@@ -136,7 +136,7 @@
         </a>
         <div id="financeMenu" class="collapse {{Request::is('finance*')?'show':''}}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                @if (userHasPermission('referral-store'))
+                @if (userHasPermission('finance-index'))
                 <a class="collapse-item {{Request::is('finance/due_collection')?'active':''}}" href="{{ route('due_collection.index') }}"><i class="fas fa-fw fa-arrow-right mr-2"></i> Due Collection</a>
                 @endif
             </div>
